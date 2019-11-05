@@ -3,6 +3,9 @@ import * as Yup from 'yup';
 import Student from '../models/Student';
 import HelpOrder from '../models/HelpOrder';
 
+import HelpOrderAnswerMail from '../jobs/HelpOrderAnswerMail';
+import Queue from '../../lib/Queue';
+
 class GymHelpOrderController {
   async index(req, res) {
     const help_orders = await HelpOrder.findAll({
@@ -63,6 +66,11 @@ class GymHelpOrderController {
           attributes: ['id', 'name', 'email', 'age', 'weight', 'height'],
         },
       ],
+    });
+
+    await Queue.add(HelpOrderAnswerMail.key, {
+      helpOrder: helpOrderUpdated,
+      student: helpOrderUpdated.student,
     });
 
     return res.json(helpOrderUpdated);

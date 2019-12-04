@@ -16,6 +16,7 @@ class MembershipController {
         'start_date',
         'end_date',
         'price',
+        'active',
         'created_at',
         'updated_at',
       ],
@@ -80,16 +81,29 @@ class MembershipController {
 
     await Queue.add(WelcomeMail.key, { membership, student, plan });
 
-    return res.json({
-      id: membership.id,
-      start_date: membership.start_date,
-      end_date: membership.end_date,
-      price: membership.price,
-      created_at: membership.created_at,
-      updated_at: membership.updated_at,
-      student,
-      plan,
+    const membershipCreated = await Membership.findByPk(membership.id, {
+      attributes: [
+        'id',
+        'start_date',
+        'end_date',
+        'price',
+        'active',
+        'created_at',
+        'updated_at',
+      ],
+      include: [
+        {
+          model: Student,
+          as: 'student',
+        },
+        {
+          model: Plan,
+          as: 'plan',
+        },
+      ],
     });
+
+    return res.json(membershipCreated);
   }
 
   async delete(req, res) {
@@ -164,6 +178,7 @@ class MembershipController {
         'start_date',
         'end_date',
         'price',
+        'active',
         'created_at',
         'updated_at',
       ],

@@ -13,12 +13,7 @@ export function* signIn({ payload }) {
     password,
   });
 
-  const { token, user, error } = response.data;
-
-  if (error) {
-    console.tron.error(error);
-    return;
-  }
+  const { token, user } = response.data;
 
   yield put(signInSuccess(token, user));
 

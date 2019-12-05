@@ -25,11 +25,12 @@ export const Container = styled.div`
       display: flex;
       flex-direction: column;
       color: #444444;
+      margin: 10px 0 20px;
 
       input {
         height: 44px;
         padding: 0 15px;
-        margin: 10px 0 20px;
+        margin: 5px 0 10px;
         border: 1px solid #dddddd;
         border-radius: 4px;
 
@@ -37,6 +38,12 @@ export const Container = styled.div`
           color: #999999;
         }
       }
+    }
+
+    span {
+      color: red;
+      margin: 0 0 10px;
+      font-weight: bold;
     }
 
     button {

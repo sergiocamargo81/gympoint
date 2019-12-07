@@ -4,6 +4,9 @@ import Route from './Route';
 
 import SignIn from '~/pages/SignIn';
 import Students from '~/pages/Students';
+import Plans from '~/pages/Plans';
+import Memberships from '~/pages/Memberships';
+import HelpOrders from '~/pages/HelpOrders';
 
 export default function Routes() {
   return (
@@ -11,6 +14,9 @@ export default function Routes() {
       <Route path="/" exact component={SignIn} />
 
       <Route path="/students" component={Students} isPrivate />
+      <Route path="/plans" component={Plans} isPrivate />
+      <Route path="/memberships" component={Memberships} isPrivate />
+      <Route path="/help-orders" component={HelpOrders} isPrivate />
     </Switch>
   );
 }

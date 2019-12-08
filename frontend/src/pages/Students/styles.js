@@ -7,7 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
   width: 900px;
 
-  div {
+  > div {
     width: inherit;
     display: flex;
     justify-content: space-between;
@@ -20,21 +20,53 @@ export const Container = styled.div`
     }
 
     button {
-      width: 100px;
+      width: 150px;
       text-transform: uppercase;
       background: #ee4d64;
-      font-weight: bold;
       color: #fff;
       border: 0;
       border-radius: 4px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      span {
+        font-weight: bold;
+        font-size: 14px;
+        border: 0;
+        margin: 0 15px 0 0;
+        flex-grow: 0;
+      }
+
+      svg {
+        flex-grow: 0;
+        margin: 0 0 0 15px;
+      }
     }
 
-    input {
-      width: 250px;
+    > form {
       margin-left: 20px;
-      border-radius: 4px;
-      border: 1px solid #eee;
-      padding: 10px 10px 10px 30px;
+      width: 250px;
+
+      > svg {
+        color: #a9a9a9;
+        position: absolute;
+        margin-top: 10px;
+        margin-left: 10px;
+      }
+
+      > input {
+        width: 250px;
+
+        border-radius: 4px;
+        border: 1px solid #eee;
+        padding: 10px 10px 10px 40px;
+
+        &::placeholder {
+          color: #a9a9a9;
+        }
+      }
     }
   }
 `;

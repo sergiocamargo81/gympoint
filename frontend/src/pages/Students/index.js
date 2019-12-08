@@ -1,4 +1,5 @@
 import React from 'react';
+import { MdAdd, MdSearch } from 'react-icons/md';
 import api from '~/services/api';
 
 import { Container, StudentsTable } from './styles';
@@ -22,8 +23,14 @@ export default function Students() {
     <Container>
       <div>
         <span>Gerenciando alunos</span>
-        <button type="submit">Cadastrar</button>
-        <input type="text" placeholder="Buscar aluno" />
+        <button type="submit">
+          <MdAdd size={20} />
+          <span>Cadastrar</span>
+        </button>
+        <form>
+          <MdSearch size={20} />
+          <input type="text" placeholder="Buscar aluno" />
+        </form>
       </div>
       <StudentsTable>
         <thead>

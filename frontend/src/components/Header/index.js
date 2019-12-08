@@ -1,15 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { useDispatch } from 'react-redux';
 import logo from '~/assets/logo-small.png';
 
 import { Container, Content, MenuLink, Profile } from './styles';
 
-const ActiveStyle = {
-  color: '#444',
-};
+import { signOut } from '~/store/modules/auth/actions';
 
 export default function Header() {
+  const ActiveStyle = {
+    color: '#444',
+  };
+  const dispatch = useDispatch();
+
+  function handleSignOut() {
+    dispatch(signOut());
+  }
+
   return (
     <Container>
       <Content>
@@ -32,7 +40,7 @@ export default function Header() {
           <Profile>
             <div>
               <strong>Administrador</strong>
-              <Link to="/">Sair do Sistema</Link>
+              <button onClick={handleSignOut}>Sair do Sistema</button>
             </div>
           </Profile>
         </aside>

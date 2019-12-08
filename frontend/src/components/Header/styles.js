@@ -48,12 +48,14 @@ export const Profile = styled.div`
       color: #333;
     }
 
-    a {
+    button {
       display: block;
       margin-top: 2px;
       font-size: 12px;
       color: red;
       font-weight: bold;
+      border: 0;
+      background: transparent;
     }
   }
 `;

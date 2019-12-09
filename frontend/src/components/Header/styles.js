@@ -21,8 +21,8 @@ export const Content = styled.div`
     align-items: center;
 
     img {
-      margin-right: 20px;
-      padding-right: 20px;
+      margin: 0 25px 0 15px;
+      padding: 0 20px 0 20px;
       border-right: 1px solid #eee;
     }
   }
@@ -35,9 +35,8 @@ export const Content = styled.div`
 
 export const Profile = styled.div`
   display: flex;
-  margin-left: 20px;
-  padding-left: 20px;
-  border-left: 1px solid #eee;
+  margin: 0 10px 0 0;
+  padding: 0 10px 0 0;
 
   div {
     text-align: right;

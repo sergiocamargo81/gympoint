@@ -41,7 +41,7 @@ export default function Header() {
             <div>
               <strong>Administrador</strong>
               <button type="button" onClick={handleSignOut}>
-                Sair do Sistema
+                sair do Sistema
               </button>
             </div>
           </Profile>

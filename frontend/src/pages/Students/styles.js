@@ -12,7 +12,7 @@ export const Panel = styled.div`
   width: inherit;
   display: flex;
   justify-content: space-between;
-  margin: 30px 0 30px;
+  margin: 30px 0 20px;
 
   span {
     flex-grow: 1;
@@ -21,7 +21,7 @@ export const Panel = styled.div`
   }
 
   button {
-    width: 150px;
+    width: 142px;
     text-transform: uppercase;
     background: #ee4d64;
     color: #fff;
@@ -47,8 +47,7 @@ export const Panel = styled.div`
   }
 
   > form {
-    margin-left: 20px;
-    width: 250px;
+    margin-left: 17px;
 
     > svg {
       color: #a9a9a9;
@@ -58,10 +57,11 @@ export const Panel = styled.div`
     }
 
     > input {
-      width: 250px;
+      width: 237px;
+      height: 37px;
 
       border-radius: 4px;
-      border: 1px solid #eee;
+      border: 1px solid #ddd;
       padding: 10px 10px 10px 40px;
 
       &::placeholder {
@@ -86,7 +86,7 @@ export const StudentsTable = styled.table`
         font-size: 16px;
         font-weight: bold;
         white-space: nowrap;
-        padding-bottom: 20px;
+        padding-bottom: 5px;
         text-transform: uppercase;
       }
     }
@@ -95,6 +95,8 @@ export const StudentsTable = styled.table`
   tbody {
     tr {
       width: 1150;
+      color: #666666;
+      font-size: 16px;
 
       td {
         padding: 15px 0;
@@ -119,13 +121,45 @@ export const ThEmail = styled.th`
 `;
 
 export const ThAge = styled.th`
-  width: 180px;
+  width: 40px;
+`;
+
+export const ThBlank = styled.th`
+  width: 100px;
 `;
 
 export const ThEdit = styled.th`
-  width: 55px;
+  width: 75px;
 `;
 
 export const ThDelete = styled.th`
-  width: 55px;
+  width: 75px;
+`;
+
+export const TdAge = styled.td`
+  text-align: center;
+`;
+
+export const TdEdit = styled.td`
+  text-align: right;
+`;
+
+export const TdDelete = styled.td`
+  text-align: right;
+`;
+
+export const ButtonEdit = styled.button`
+  font-size: 15px;
+  color: #4d85ee;
+  text-align: right;
+  background: transparent;
+  border: 0;
+`;
+
+export const ButtonDelete = styled.button`
+  font-size: 15px;
+  color: #de3b3b;
+  text-align: right;
+  background: transparent;
+  border: 0;
 `;

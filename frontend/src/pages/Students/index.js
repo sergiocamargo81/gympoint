@@ -12,8 +12,14 @@ import {
   ThName,
   ThEmail,
   ThAge,
+  ThBlank,
   ThEdit,
   ThDelete,
+  TdAge,
+  TdEdit,
+  TdDelete,
+  ButtonEdit,
+  ButtonDelete,
 } from './styles';
 
 export default function Students() {
@@ -61,6 +67,7 @@ export default function Students() {
             <ThName>Nome</ThName>
             <ThEmail>E-mail</ThEmail>
             <ThAge>Idade</ThAge>
+            <ThBlank />
             <thEdit />
             <thDelete />
           </tr>
@@ -70,9 +77,14 @@ export default function Students() {
             <tr key={s.id}>
               <td>{s.name}</td>
               <td>{s.email}</td>
-              <td>{s.age}</td>
-              <td>editar</td>
-              <td>apagar</td>
+              <TdAge>{s.age}</TdAge>
+              <td />
+              <TdEdit>
+                <ButtonEdit>editar</ButtonEdit>
+              </TdEdit>
+              <TdDelete>
+                <ButtonDelete OnClick={() => {}}>apagar</ButtonDelete>
+              </TdDelete>
             </tr>
           ))}
         </tbody>

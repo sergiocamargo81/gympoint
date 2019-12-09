@@ -5,7 +5,16 @@ import { MdAdd, MdSearch } from 'react-icons/md';
 
 import api from '~/services/api';
 
-import { Container, StudentsTable } from './styles';
+import {
+  Container,
+  Panel,
+  StudentsTable,
+  ThName,
+  ThEmail,
+  ThAge,
+  ThEdit,
+  ThDelete,
+} from './styles';
 
 export default function Students() {
   const [students, setStudents] = useState([]);
@@ -29,9 +38,9 @@ export default function Students() {
 
   return (
     <Container>
-      <div>
+      <Panel>
         <span>Gerenciando alunos</span>
-        <button type="submit">
+        <button type="button">
           <MdAdd size={20} />
           <span>Cadastrar</span>
         </button>
@@ -39,20 +48,21 @@ export default function Students() {
           <MdSearch size={20} />
           <input
             name="studentFilter"
+            value={paramStudent}
             onChange={handleSearch}
             type="text"
             placeholder="Buscar aluno"
           />
         </form>
-      </div>
+      </Panel>
       <StudentsTable>
         <thead>
           <tr>
-            <th>Nome</th>
-            <th>E-mail</th>
-            <th>Idade</th>
-            <th />
-            <th />
+            <ThName>Nome</ThName>
+            <ThEmail>E-mail</ThEmail>
+            <ThAge>Idade</ThAge>
+            <thEdit />
+            <thDelete />
           </tr>
         </thead>
         <tbody>

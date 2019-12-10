@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { MdAdd, MdSearch } from 'react-icons/md';
+import { MdAdd, MdSearch, MdChevronLeft, MdCheck } from 'react-icons/md';
+
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import api from '~/services/api';
 
@@ -20,6 +23,7 @@ import {
   TdDelete,
   ButtonEdit,
   ButtonDelete,
+  ConfirmUi,
 } from './styles';
 
 export default function Students() {
@@ -40,6 +44,45 @@ export default function Students() {
 
   function handleSearch(e) {
     setParamStudent(e.target.value);
+  }
+
+  function handleClickDelete() {}
+
+  function handleDelete() {
+    const options = {
+      childrenElement: () => <div />,
+      customUI: ({ onClose }) => {
+        return (
+          <ConfirmUi>
+            <h1>Apagar aluno?</h1>
+            <div>
+              <button type="button" onClick={onClose}>
+                <MdChevronLeft size={20} />
+                <span>Não</span>
+              </button>
+              <button
+                id="yes"
+                type="button"
+                onClick={() => {
+                  handleClickDelete();
+                  onClose();
+                }}
+              >
+                <MdCheck size={20} />
+                <span>Sim</span>
+              </button>
+            </div>
+          </ConfirmUi>
+        );
+      },
+      closeOnEscape: true,
+      closeOnClickOutside: true,
+      willUnmount: () => {},
+      onClickOutside: () => {},
+      onKeypressEscape: () => {},
+    };
+
+    confirmAlert(options);
   }
 
   return (
@@ -68,8 +111,8 @@ export default function Students() {
             <ThEmail>E-mail</ThEmail>
             <ThAge>Idade</ThAge>
             <ThBlank />
-            <thEdit />
-            <thDelete />
+            <ThEdit />
+            <ThDelete />
           </tr>
         </thead>
         <tbody>
@@ -83,7 +126,7 @@ export default function Students() {
                 <ButtonEdit>editar</ButtonEdit>
               </TdEdit>
               <TdDelete>
-                <ButtonDelete OnClick={() => {}}>apagar</ButtonDelete>
+                <ButtonDelete onClick={handleDelete}>apagar</ButtonDelete>
               </TdDelete>
             </tr>
           ))}

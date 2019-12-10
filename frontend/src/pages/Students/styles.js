@@ -22,6 +22,7 @@ export const Panel = styled.div`
 
   button {
     width: 142px;
+    height: 37px;
     text-transform: uppercase;
     background: #ee4d64;
     color: #fff;

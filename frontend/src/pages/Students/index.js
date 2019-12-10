@@ -6,6 +6,8 @@ import { MdAdd, MdSearch, MdChevronLeft, MdCheck } from 'react-icons/md';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
+import { Link } from 'react-router-dom';
+
 import api from '~/services/api';
 
 import {
@@ -89,10 +91,12 @@ export default function Students() {
     <Container>
       <Panel>
         <span>Gerenciando alunos</span>
-        <button type="button">
-          <MdAdd size={20} />
-          <span>Cadastrar</span>
-        </button>
+        <Link to="student">
+          <button type="button">
+            <MdAdd size={20} />
+            <span>Cadastrar</span>
+          </button>
+        </Link>
         <form>
           <MdSearch size={20} />
           <input

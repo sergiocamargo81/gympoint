@@ -10,9 +10,14 @@ import { Link } from 'react-router-dom';
 
 import api from '~/services/api';
 
+import history from '~/services/history';
+
+import Pagination from '~/components/Pagination';
+
 import {
   Container,
   Panel,
+  Content,
   StudentsTable,
   ThName,
   ThEmail,
@@ -30,22 +35,38 @@ import {
 
 export default function Students() {
   const [students, setStudents] = useState([]);
-  const [paramStudent, setParamStudent] = useState('');
+  const [studentsFilter, setStudentsFilter] = useState('');
+  const [page, setPage] = useState({
+    index: 1,
+    total: 1,
+    size: 1,
+  });
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     async function loadStudents() {
-      const response = await api.get(`students/?q=${paramStudent}`);
+      const uri = `students/?nameFilter=${studentsFilter}`;
 
-      setStudents(response.data);
+      const response = await api.get(
+        `${uri}&page=${page.index}&pageSize=${page.size}`
+      );
+
+      setPage(response.data.page);
+      setStudents(response.data.students);
     }
 
     loadStudents();
-  }, [paramStudent]);
+  }, [page.index, page.size, studentsFilter]);
+
+  function handlePageChange(page) {
+    setPage(page);
+  }
 
   function handleSearch(e) {
-    setParamStudent(e.target.value);
+    setPage({ ...page, index: 1 });
+
+    setStudentsFilter(e.target.value);
   }
 
   function handleClickDelete() {}
@@ -87,55 +108,81 @@ export default function Students() {
     confirmAlert(options);
   }
 
+  function handleEdit(student) {
+    history.push({
+      pathname: `student`,
+      state: {
+        student,
+      },
+    });
+  }
+
+  function handleCreate() {
+    history.push({
+      pathname: 'student',
+      state: {
+        student: {
+          id: null,
+          name: '',
+          email: '',
+          age: '',
+          weight: '',
+          height: '',
+        },
+      },
+    });
+  }
+
   return (
     <Container>
       <Panel>
         <span>Gerenciando alunos</span>
-        <Link to="student">
-          <button type="button">
-            <MdAdd size={20} />
-            <span>Cadastrar</span>
-          </button>
-        </Link>
+        <button type="button" onClick={() => handleCreate()}>
+          <MdAdd size={20} />
+          <span>Cadastrar</span>
+        </button>
         <form>
           <MdSearch size={20} />
           <input
             name="studentFilter"
-            value={paramStudent}
+            value={studentsFilter}
             onChange={handleSearch}
             type="text"
             placeholder="Buscar aluno"
           />
         </form>
       </Panel>
-      <StudentsTable>
-        <thead>
-          <tr>
-            <ThName>Nome</ThName>
-            <ThEmail>E-mail</ThEmail>
-            <ThAge>Idade</ThAge>
-            <ThBlank />
-            <ThEdit />
-            <ThDelete />
-          </tr>
-        </thead>
-        <tbody>
-          {students.map(s => (
-            <tr key={s.id}>
-              <td>{s.name}</td>
-              <td>{s.email}</td>
-              <TdAge>{s.age}</TdAge>
-              <td />
-              <TdEdit>
-                <ButtonEdit>editar</ButtonEdit>
-              </TdEdit>
-              <TdDelete>
-                <ButtonDelete onClick={handleDelete}>apagar</ButtonDelete>
-              </TdDelete>
+      <Content>
+        <StudentsTable>
+          <thead>
+            <tr>
+              <ThName>Nome</ThName>
+              <ThEmail>E-mail</ThEmail>
+              <ThAge>Idade</ThAge>
+              <ThBlank />
+              <ThEdit />
+              <ThDelete />
             </tr>
-          ))}
-        </tbody>
-      </StudentsTable>
+          </thead>
+          <tbody>
+            {students.map(s => (
+              <tr key={s.id}>
+                <td>{s.name}</td>
+                <td>{s.email}</td>
+                <TdAge>{s.age}</TdAge>
+                <td />
+                <TdEdit>
+                  <ButtonEdit onClick={() => handleEdit(s)}>editar</ButtonEdit>
+                </TdEdit>
+                <TdDelete>
+                  <ButtonDelete onClick={handleDelete}>apagar</ButtonDelete>
+                </TdDelete>
+              </tr>
+            ))}
+          </tbody>
+        </StudentsTable>
+        <Pagination page={page} onChange={handlePageChange} />
+      </Content>
     </Container>
   );
 }

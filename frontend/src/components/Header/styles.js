@@ -50,11 +50,15 @@ export const Profile = styled.div`
     button {
       display: block;
       margin-top: 2px;
-      font-size: 12px;
+      font-size: 14px;
       color: red;
-      font-weight: bold;
       border: 0;
       background: transparent;
+      transition: font-weight 0.2s;
+
+      &:hover {
+        font-weight: bold;
+      }
     }
   }
 `;

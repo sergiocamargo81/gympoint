@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { darken } from 'polished';
 
 export const Container = styled.div`
   width: 900px;
@@ -20,14 +21,19 @@ export const Panel = styled.div`
     font-weight: bold;
   }
 
-  > button {
+  button {
     width: 110px;
     height: 37px;
     text-transform: uppercase;
-    background: #cccccc;
+    background: #ccc;
     color: #fff;
     border: 0;
     border-radius: 4px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: ${darken(0.1, '#ccc')};
+    }
 
     display: flex;
     align-items: center;
@@ -50,6 +56,11 @@ export const Panel = styled.div`
   > button.save {
     background: #ee4d64;
     margin-left: 20px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: ${darken(0.1, '#ee4d64')};
+    }
   }
 `;
 
@@ -67,11 +78,25 @@ export const StudentData = styled.div`
     padding: 12px;
     border-radius: 4px;
     border: 1px solid #ddd;
-    margin: 6px 0 20px 0;
+    margin: 6px 0 6px 0;
+    max-height: 45px;
     color: #444;
 
     &::placeholder {
       color: #999;
+    }
+  }
+
+  label {
+    flex-grow: 1;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+
+    span {
+      color: red;
     }
   }
 
@@ -83,18 +108,6 @@ export const StudentData = styled.div`
     > label:nth-child(2) {
       margin-left: 15px;
       margin-right: 15px;
-    }
-  }
-
-  label {
-    flex-grow: 1;
-    font-weight: bold;
-    font-size: 14px;
-    display: flex;
-    flex-direction: column;
-
-    content {
-      margin: 5px 0;
     }
   }
 `;

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { darken } from 'polished';
 
 export const Container = styled.div`
   align-self: center;
@@ -28,6 +29,11 @@ export const Panel = styled.div`
     color: #fff;
     border: 0;
     border-radius: 4px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: ${darken(0.1, '#ee4d64')};
+    }
 
     display: flex;
     align-items: center;
@@ -72,10 +78,14 @@ export const Panel = styled.div`
   }
 `;
 
-export const StudentsTable = styled.table`
-  width: inherit;
+export const Content = styled.div`
+  width: 100%;
   background: #fff;
-  padding: 30px 30px 5px 30px;
+  padding: 30px 30px 15px 30px;
+  border-radius: 4px;
+`;
+
+export const StudentsTable = styled.table`
   border-spacing: 0;
 
   thead {
@@ -96,7 +106,7 @@ export const StudentsTable = styled.table`
   tbody {
     tr {
       width: 1150;
-      color: #666666;
+      color: #666;
       font-size: 16px;
 
       td {
@@ -155,6 +165,11 @@ export const ButtonEdit = styled.button`
   text-align: right;
   background: transparent;
   border: 0;
+  transition: font-weight 0.2s;
+
+  &:hover {
+    font-weight: bold;
+  }
 `;
 
 export const ButtonDelete = styled.button`
@@ -163,6 +178,11 @@ export const ButtonDelete = styled.button`
   text-align: right;
   background: transparent;
   border: 0;
+  transition: font-weight 0.2s;
+
+  &:hover {
+    font-weight: bold;
+  }
 `;
 
 export const ConfirmUi = styled.div`
@@ -184,13 +204,18 @@ export const ConfirmUi = styled.div`
     margin-top: 40px;
 
     > button {
-      background: #cccccc;
+      background: #ccc;
       width: 90px;
       text-transform: uppercase;
       color: #fff;
       border: 0;
       height: 37px;
       border-radius: 4px;
+      transition: background 0.2s;
+
+      &:hover {
+        background: ${darken(0.1, '#ccc')};
+      }
 
       display: flex;
       align-items: center;
@@ -212,6 +237,11 @@ export const ConfirmUi = styled.div`
 
     > button#yes {
       background: #ee4d64;
+      transition: background 0.2s;
+
+      &:hover {
+        background: ${darken(0.1, '#ee4d64')};
+      }
     }
   }
 `;

@@ -5,14 +5,26 @@ import Student from '../models/Student';
 
 class StudentController {
   async index(req, res) {
-    const query = req.query.q || '';
+    const page =
+      !req.query.page || Number.isNaN(req.query.page)
+        ? 1
+        : parseInt(req.query.page, 10);
 
-    const students = await Student.findAll({
+    const pageSize =
+      !req.query.pageSize || Number.isNaN(req.query.pageSize)
+        ? 10
+        : parseInt(req.query.pageSize, 10);
+
+    const nameFilter = req.query.nameFilter || '';
+
+    const result = await Student.findAndCountAll({
       where: {
         name: {
-          [Op.iLike]: `%${query}%`,
+          [Op.iLike]: `%${nameFilter}%`,
         },
       },
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
       attributes: [
         'id',
         'name',
@@ -23,10 +35,19 @@ class StudentController {
         'created_at',
         'updated_at',
       ],
-      order: ['id'],
+      order: ['name'],
     });
 
-    return res.json(students);
+    return res.json({
+      page: {
+        index: page,
+        total:
+          parseInt(result.count / pageSize, 10) +
+          (result.count % pageSize > 0 ? 1 : 0),
+        size: pageSize,
+      },
+      students: result.rows,
+    });
   }
 
   async store(req, res) {

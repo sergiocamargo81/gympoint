@@ -97,11 +97,13 @@ class StudentController {
 
   async update(req, res) {
     const schema = Yup.object().shape({
+      id: Yup.number()
+        .positive()
+        .integer(),
       name: Yup.string(),
       email: Yup.string()
         .email()
         .required(),
-      oldEmail: Yup.string().email(),
       age: Yup.number()
         .positive()
         .integer(),
@@ -115,48 +117,46 @@ class StudentController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const { email, oldEmail } = req.body;
+    const id = parseInt(req.body.id, 10);
+    const { email } = req.body;
 
-    let student;
+    const student = await Student.findByPk(id);
 
-    if (oldEmail) {
-      student = await Student.findOne({
-        where: { email: oldEmail },
-      });
-
-      if (!student) {
-        return res.status(400).json({ error: 'Student not found' });
-      }
-
-      const studentExists = await Student.findOne({
-        where: { email },
-      });
-
-      if (studentExists) {
-        return res
-          .status(400)
-          .json({ error: 'Student already exists, can not update' });
-      }
-    } else {
-      student = await Student.findOne({
-        where: { email },
-      });
-
-      if (!student) {
-        return res.status(400).json({ error: 'Student not found' });
-      }
+    if (!student) {
+      return res.status(400).json({ error: 'Student not found' });
     }
 
-    const { id, name, age, weight, height } = await student.update(req.body);
-
-    return res.json({
-      id,
-      name,
-      email,
-      age,
-      weight,
-      height,
+    const emailExists = await Student.findOne({
+      where: { email, id: { [Op.ne]: id } },
     });
+
+    if (emailExists) {
+      return res
+        .status(400)
+        .json({ error: 'There is another student with this email' });
+    }
+
+    const updatedStudent = await student.update({
+      name: req.body.name,
+      email: req.body.email,
+      age: req.body.age,
+      weight: req.body.weight,
+      height: req.body.height,
+    });
+
+    return res.json(updatedStudent);
+  }
+
+  async delete(req, res) {
+    const student = await Student.findByPk(req.params.id);
+
+    if (!student) {
+      return res.status(400).json({ error: 'Student does not exists' });
+    }
+
+    student.destroy();
+
+    return res.json(student);
   }
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import * as Yup from 'yup';
 
@@ -25,8 +25,25 @@ const schema = Yup.object().shape({
 export default function Student({ history }) {
   const { student } = history.location.state;
 
-  async function handleSubmit({ data }) {
-    console.log(data);
+  async function handleSubmit({ name, email, age, weight, height }) {
+    const id = Number(student.id);
+
+    if (id) {
+      console.log(`update! id: ${id}`);
+      await api.put('students/', {
+        id,
+        name,
+        email,
+        age,
+        weight,
+        height,
+      });
+    } else {
+      console.log('create!');
+      await api.post('students/', { name, email, age, weight, height });
+    }
+
+    history.push('students');
   }
 
   const title = student.id ? 'Edição de Aluno' : 'Cadastro de Aluno';

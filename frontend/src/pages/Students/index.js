@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import { useDispatch } from 'react-redux';
 
 import { MdAdd, MdSearch, MdChevronLeft, MdCheck } from 'react-icons/md';
@@ -35,7 +36,7 @@ import {
 
 export default function Students() {
   const [students, setStudents] = useState([]);
-  const [studentsFilter, setStudentsFilter] = useState('');
+  const [nameFilter, setNameFilter] = useState('');
   const [page, setPage] = useState({
     index: 1,
     total: 1,
@@ -46,7 +47,7 @@ export default function Students() {
 
   useEffect(() => {
     async function loadStudents() {
-      const uri = `students/?nameFilter=${studentsFilter}`;
+      const uri = `students/?nameFilter=${nameFilter}`;
 
       const response = await api.get(
         `${uri}&page=${page.index}&pageSize=${page.size}`
@@ -57,7 +58,7 @@ export default function Students() {
     }
 
     loadStudents();
-  }, [page.index, page.size, studentsFilter]);
+  }, [page.index, page.size, nameFilter]);
 
   function handlePageChange(page) {
     setPage(page);
@@ -66,7 +67,7 @@ export default function Students() {
   function handleSearch(e) {
     setPage({ ...page, index: 1 });
 
-    setStudentsFilter(e.target.value);
+    setNameFilter(e.target.value);
   }
 
   function handleClickDelete() {}
@@ -145,7 +146,7 @@ export default function Students() {
           <MdSearch size={20} />
           <input
             name="studentFilter"
-            value={studentsFilter}
+            value={nameFilter}
             onChange={handleSearch}
             type="text"
             placeholder="Buscar aluno"

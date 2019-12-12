@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 import * as Yup from 'yup';
 
@@ -28,22 +29,38 @@ export default function Student({ history }) {
   async function handleSubmit({ name, email, age, weight, height }) {
     const id = Number(student.id);
 
-    if (id) {
-      console.log(`update! id: ${id}`);
-      await api.put('students/', {
-        id,
-        name,
-        email,
-        age,
-        weight,
-        height,
-      });
-    } else {
-      console.log('create!');
-      await api.post('students/', { name, email, age, weight, height });
-    }
+    const _then = () => history.push('students');
 
-    history.push('students');
+    const _catch = e => {
+      let message;
+
+      if (e.response) {
+        message = e.response.data.error;
+      } else if (e.request) {
+        message = e.request.toString();
+      } else {
+        message = e.message;
+      }
+
+      toast.error(message);
+    };
+
+    await (id
+      ? api
+          .put('students/', {
+            id,
+            name,
+            email,
+            age,
+            weight,
+            height,
+          })
+          .then(_then)
+          .catch(_catch)
+      : api
+          .post('students/', { name, email, age, weight, height })
+          .then(_then)
+          .catch(_catch));
   }
 
   const title = student.id ? 'Edição de Aluno' : 'Cadastro de Aluno';

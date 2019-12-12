@@ -42,6 +42,7 @@ export default function Students() {
     total: 1,
     size: 10,
   });
+  const [deleted, setDeleted] = useState({});
 
   const dispatch = useDispatch();
 
@@ -58,7 +59,7 @@ export default function Students() {
     }
 
     loadStudents();
-  }, [page.index, page.size, nameFilter]);
+  }, [nameFilter, page.index, page.size, deleted]);
 
   function handlePageChange(page) {
     setPage(page);
@@ -70,9 +71,15 @@ export default function Students() {
     setNameFilter(e.target.value);
   }
 
-  function handleClickDelete() {}
+  async function handleClickDelete(id) {
+    if (id) {
+      const response = await api.delete(`students/${id}`);
 
-  function handleDelete() {
+      setDeleted(response);
+    }
+  }
+
+  function handleDelete(id) {
     const options = {
       childrenElement: () => <div />,
       customUI: ({ onClose }) => {
@@ -88,7 +95,7 @@ export default function Students() {
                 id="yes"
                 type="button"
                 onClick={() => {
-                  handleClickDelete();
+                  handleClickDelete(id);
                   onClose();
                 }}
               >
@@ -176,7 +183,9 @@ export default function Students() {
                   <ButtonEdit onClick={() => handleEdit(s)}>editar</ButtonEdit>
                 </TdEdit>
                 <TdDelete>
-                  <ButtonDelete onClick={handleDelete}>apagar</ButtonDelete>
+                  <ButtonDelete onClick={() => handleDelete(s.id)}>
+                    apagar
+                  </ButtonDelete>
                 </TdDelete>
               </tr>
             ))}

@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { Container, ActivePage, PageLink } from './styles';
+import {
+  MdChevronLeft,
+  MdChevronRight,
+  MdFirstPage,
+  MdLastPage,
+} from 'react-icons/md';
+import { Container, ActivePage, PageLink, PageMove } from './styles';
 
 function AddLeft(pages) {
   const page = pages[0];
@@ -34,9 +40,13 @@ export default function Pagination({ page, onChange }) {
 
   const pages = [page];
 
-  for (let i = 0; i < range && AddLeft(pages); i += 1);
+  const previousPage = AddLeft(pages) ? pages[0] : null;
 
-  for (let i = 0; i < range && AddRight(pages); i += 1);
+  const nextPage = AddRight(pages) ? pages[pages.length - 1] : null;
+
+  for (let i = 1; i < range && AddLeft(pages); i += 1);
+
+  for (let i = 1; i < range && AddRight(pages); i += 1);
 
   while (pages.length < max && (AddLeft(pages) || AddRight(pages)));
 
@@ -44,18 +54,66 @@ export default function Pagination({ page, onChange }) {
     onChange(p);
   }
 
+  const size = 20;
+
   return (
     <Container>
-      <span>Páginas: </span>
-      {pages.map(p =>
-        p === page ? (
-          <ActivePage key={p.index}>{p.index}</ActivePage>
+      <div>
+        <span>Páginas: </span>
+
+        {pages[0].index > 1 ? (
+          <PageMove
+            key="first"
+            onClick={() => handleClick({ ...page, index: 1 })}
+          >
+            <MdFirstPage size={size} />
+          </PageMove>
         ) : (
-          <PageLink type="button" key={p.index} onClick={() => handleClick(p)}>
-            {p.index}
-          </PageLink>
-        )
-      )}
+          <></>
+        )}
+
+        {previousPage ? (
+          <PageMove
+            key="previousPage"
+            onClick={() => handleClick(previousPage)}
+          >
+            <MdChevronLeft size={size} />
+          </PageMove>
+        ) : (
+          <></>
+        )}
+      </div>
+      <div>
+        {pages.map(p =>
+          p === page ? (
+            <ActivePage key={p.index}>{p.index}</ActivePage>
+          ) : (
+            <PageLink key={p.index} onClick={() => handleClick(p)}>
+              {p.index}
+            </PageLink>
+          )
+        )}
+      </div>
+      <div>
+        {nextPage ? (
+          <PageMove key="nextPage" onClick={() => handleClick(nextPage)}>
+            <MdChevronRight size={size} />
+          </PageMove>
+        ) : (
+          <></>
+        )}
+
+        {pages[pages.length - 1].index < page.total ? (
+          <PageMove
+            key="last"
+            onClick={() => handleClick({ ...page, index: page.total })}
+          >
+            <MdLastPage size={size} />
+          </PageMove>
+        ) : (
+          <></>
+        )}
+      </div>
     </Container>
   );
 }

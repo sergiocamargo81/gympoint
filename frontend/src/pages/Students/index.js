@@ -39,7 +39,7 @@ export default function Students() {
   const [page, setPage] = useState({
     index: 1,
     total: 1,
-    size: 1,
+    size: 10,
   });
 
   const dispatch = useDispatch();

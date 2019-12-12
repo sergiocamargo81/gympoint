@@ -7,29 +7,42 @@ export const Container = styled.div`
   margin: 15px 0;
 
   display: flex;
-  justify-content: center;
   align-items: baseline;
+  justify-content: center;
 
-  span:first-child {
-    color: #666;
+  > div:nth-child(1) {
+    flex: 1;
+
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+
+    > span:first-child {
+      color: #666;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border: 0;
+      margin: 0 5px;
+    }
   }
-`;
 
-export const PageLink = styled.button`
-  background: #fff;
-  border: 1px solid #666;
-  color: #666;
-  width: 30px;
-  height: 30px;
-  margin: 0 5px;
+  > div:nth-child(2) {
+    flex: 0;
 
-  border-radius: 4px;
-  transition: background 0.1s color #fff border 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+  }
 
-  &:hover {
-    background: ${darken(0.1, '#ee4d64')};
-    border: 0;
-    color: #fff;
+  > div:nth-child(3) {
+    flex: 1;
+
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
   }
 `;
 
@@ -46,4 +59,54 @@ export const ActivePage = styled.span`
   margin: 0 5px;
 
   border-radius: 4px;
+`;
+
+export const PageLink = styled.button.attrs(props => ({
+  type: 'button',
+}))`
+  background: #fff;
+  border: 1px solid #eee;
+  color: #666;
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+
+  border-radius: 4px;
+  transition: background 0.1s;
+
+  &:hover {
+    background: ${darken(0.1, '#ee4d64')};
+    border: 0;
+    color: #fff;
+  }
+`;
+
+export const PageMove = styled.button.attrs(props => ({
+  type: 'button',
+}))`
+  background: #fff;
+  border: 0;
+  color: #ee4d64;
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+
+  border-radius: 4px;
+  transition: background 0.1s;
+
+  &:hover {
+    background: ${darken(0.1, '#ee4d64')};
+    color: #fff;
+  }
+
+  svg {
+    padding: 0;
+    border: 0;
+    outline: 0;
+    position: relative;
+    top: 1px;
+  }
+
+  position: relative;
+  top: 4px;
 `;

@@ -9,6 +9,7 @@ import { MdChevronLeft, MdCheck } from 'react-icons/md';
 
 import { Form, Input } from '@rocketseat/unform';
 
+import PropTypes from 'prop-types';
 import api from '~/services/api';
 
 import { Container, Panel, StudentData } from './styles';
@@ -18,9 +19,16 @@ const schema = Yup.object().shape({
   email: Yup.string()
     .email('Insira um e-mail válido')
     .required('O email é obrigatório'),
-  age: Yup.string().required('A idade é obrigatória'),
-  weight: Yup.string().required('O peso é obrigatório'),
-  height: Yup.string().required('A altura é obrigatória'),
+  age: Yup.number()
+    .typeError('A idade deve ser numérica')
+    .positive('A idade deve ser positiva')
+    .integer('A idade deve ser inteira'),
+  weight: Yup.number()
+    .typeError('O peso deve ser numérica')
+    .positive('O peso deve ser positivo'),
+  height: Yup.number()
+    .typeError('A altura deve ser numérica')
+    .positive('A altura deve ser positiva'),
 });
 
 export default function Student({ history }) {
@@ -46,21 +54,18 @@ export default function Student({ history }) {
     };
 
     await (id
-      ? api
-          .put('students/', {
-            id,
-            name,
-            email,
-            age,
-            weight,
-            height,
-          })
-          .then(_then)
-          .catch(_catch)
-      : api
-          .post('students/', { name, email, age, weight, height })
-          .then(_then)
-          .catch(_catch));
+      ? api.put('students/', {
+          id,
+          name,
+          email,
+          age,
+          weight,
+          height,
+        })
+      : api.post('students/', { name, email, age, weight, height })
+    )
+      .then(_then)
+      .catch(_catch);
   }
 
   const title = student.id ? 'Edição de Aluno' : 'Cadastro de Aluno';
@@ -109,3 +114,16 @@ export default function Student({ history }) {
     </Container>
   );
 }
+
+Student.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    location: PropTypes.shape({
+      state: PropTypes.shape({
+        student: PropTypes.shape({
+          id: PropTypes.number,
+        }),
+      }),
+    }),
+  }).isRequired,
+};

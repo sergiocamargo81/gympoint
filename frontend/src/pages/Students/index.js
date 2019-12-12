@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { MdAdd, MdSearch, MdChevronLeft, MdCheck } from 'react-icons/md';
+import { MdAdd, MdSearch } from 'react-icons/md';
 
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -10,6 +10,8 @@ import api from '~/services/api';
 import history from '~/services/history';
 
 import Pagination from '~/components/Pagination';
+
+import Confirm from '~/components/Confirm';
 
 import {
   Container,
@@ -27,7 +29,6 @@ import {
   TdDelete,
   ButtonEdit,
   ButtonDelete,
-  ConfirmUi,
 } from './styles';
 
 export default function Students() {
@@ -55,8 +56,8 @@ export default function Students() {
     loadStudents();
   }, [nameFilter, page.index, page.size, deleted]);
 
-  function handlePageChange(page) {
-    setPage(page);
+  function handlePageChange(p) {
+    setPage(p);
   }
 
   function handleSearch(e) {
@@ -74,40 +75,21 @@ export default function Students() {
   }
 
   function handleDelete(id) {
-    const options = {
+    confirmAlert({
       childrenElement: () => <div />,
-      customUI: ({ onClose }) => {
-        return (
-          <ConfirmUi>
-            <h1>Apagar aluno?</h1>
-            <div>
-              <button type="button" onClick={onClose}>
-                <MdChevronLeft size={20} />
-                <span>Não</span>
-              </button>
-              <button
-                id="yes"
-                type="button"
-                onClick={() => {
-                  handleClickDelete(id);
-                  onClose();
-                }}
-              >
-                <MdCheck size={20} />
-                <span>Sim</span>
-              </button>
-            </div>
-          </ConfirmUi>
-        );
-      },
+      customUI: parent => (
+        <Confirm
+          question="Apagar aluno?"
+          onConfirm={() => handleClickDelete(id)}
+          onClose={parent.onClose}
+        />
+      ),
       closeOnEscape: true,
       closeOnClickOutside: true,
       willUnmount: () => {},
       onClickOutside: () => {},
       onKeypressEscape: () => {},
-    };
-
-    confirmAlert(options);
+    });
   }
 
   function handleEdit(student) {

@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import { useDispatch } from 'react-redux';
-
 import { MdAdd, MdSearch, MdChevronLeft, MdCheck } from 'react-icons/md';
 
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-
-import { Link } from 'react-router-dom';
 
 import api from '~/services/api';
 
@@ -43,8 +39,6 @@ export default function Students() {
     size: 10,
   });
   const [deleted, setDeleted] = useState({});
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     async function loadStudents() {

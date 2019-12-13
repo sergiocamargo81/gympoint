@@ -13,23 +13,7 @@ import Pagination from '~/components/Pagination';
 
 import Confirm from '~/components/Confirm';
 
-import {
-  Container,
-  Panel,
-  Content,
-  StudentsTable,
-  ThName,
-  ThEmail,
-  ThAge,
-  ThBlank,
-  ThEdit,
-  ThDelete,
-  TdAge,
-  TdEdit,
-  TdDelete,
-  ButtonEdit,
-  ButtonDelete,
-} from './styles';
+import { Container, Panel, Content, StudentsTable } from './styles';
 
 export default function Students() {
   const [students, setStudents] = useState([]);
@@ -140,12 +124,12 @@ export default function Students() {
         <StudentsTable>
           <thead>
             <tr>
-              <ThName>Nome</ThName>
-              <ThEmail>E-mail</ThEmail>
-              <ThAge>Idade</ThAge>
-              <ThBlank />
-              <ThEdit />
-              <ThDelete />
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Idade</th>
+              <th> </th>
+              <th> </th>
+              <th> </th>
             </tr>
           </thead>
           <tbody>
@@ -153,16 +137,18 @@ export default function Students() {
               <tr key={s.id}>
                 <td>{s.name}</td>
                 <td>{s.email}</td>
-                <TdAge>{s.age}</TdAge>
+                <td>{s.age}</td>
                 <td />
-                <TdEdit>
-                  <ButtonEdit onClick={() => handleEdit(s)}>editar</ButtonEdit>
-                </TdEdit>
-                <TdDelete>
-                  <ButtonDelete onClick={() => handleDelete(s.id)}>
+                <td>
+                  <button type="button" onClick={() => handleEdit(s)}>
+                    editar
+                  </button>
+                </td>
+                <td>
+                  <button type="button" onClick={() => handleDelete(s.id)}>
                     apagar
-                  </ButtonDelete>
-                </TdDelete>
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

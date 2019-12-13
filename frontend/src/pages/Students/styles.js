@@ -88,11 +88,9 @@ export const Content = styled.div`
 export const StudentsTable = styled.table`
   border-spacing: 0;
 
-  thead {
-    tr {
-      width: 1150;
-
-      th {
+  > thead {
+    > tr {
+      > th {
         text-align: left;
         font-size: 16px;
         font-weight: bold;
@@ -100,87 +98,97 @@ export const StudentsTable = styled.table`
         padding-bottom: 5px;
         text-transform: uppercase;
       }
+
+      /* Nome */
+      > th:nth-child(1) {
+        width: 470px;
+      }
+
+      /* Email */
+      > th:nth-child(2) {
+        width: 380px;
+      }
+
+      /* Idade */
+      > th:nth-child(3) {
+        width: 40px;
+        text-align: center;
+      }
+
+      /* Blank(1) */
+      > th:nth-child(4) {
+        width: 100px;
+      }
+
+      /* Editar */
+      > th:nth-child(5) {
+        width: 75px;
+      }
+
+      /* Apagar */
+      > th:nth-child(6) {
+        width: 75px;
+      }
     }
   }
 
-  tbody {
-    tr {
+  > tbody {
+    > tr {
       width: 1150;
       color: #666;
       font-size: 16px;
 
-      td {
+      > td {
         padding: 15px 0;
         border-bottom: 1px solid #eee;
       }
+
+      /* Idade */
+      > td:nth-child(3) {
+        text-align: center;
+      }
+
+      /* Editar */
+      > td:nth-child(5) {
+        text-align: right;
+
+        > button {
+          font-size: 15px;
+          color: #4d85ee;
+          text-align: right;
+          background: transparent;
+          border: 0;
+          transition: font-weight 0.2s;
+
+          &:hover {
+            font-weight: bold;
+          }
+        }
+      }
+
+      /* Apagar */
+      > td:nth-child(6) {
+        text-align: right;
+
+        > button {
+          font-size: 15px;
+          color: #de3b3b;
+          text-align: right;
+          background: transparent;
+          border: 0;
+          transition: font-weight 0.2s;
+
+          &:hover {
+            font-weight: bold;
+          }
+        }
+      }
     }
 
-    tr:last-child {
-      td {
+    > tr:last-child {
+      > td {
         border-bottom: 0;
       }
     }
-  }
-`;
-
-export const ThName = styled.th`
-  width: 470px;
-`;
-
-export const ThEmail = styled.th`
-  width: 380px;
-`;
-
-export const ThAge = styled.th`
-  width: 40px;
-`;
-
-export const ThBlank = styled.th`
-  width: 100px;
-`;
-
-export const ThEdit = styled.th`
-  width: 75px;
-`;
-
-export const ThDelete = styled.th`
-  width: 75px;
-`;
-
-export const TdAge = styled.td`
-  text-align: center;
-`;
-
-export const TdEdit = styled.td`
-  text-align: right;
-`;
-
-export const TdDelete = styled.td`
-  text-align: right;
-`;
-
-export const ButtonEdit = styled.button`
-  font-size: 15px;
-  color: #4d85ee;
-  text-align: right;
-  background: transparent;
-  border: 0;
-  transition: font-weight 0.2s;
-
-  &:hover {
-    font-weight: bold;
-  }
-`;
-
-export const ButtonDelete = styled.button`
-  font-size: 15px;
-  color: #de3b3b;
-  text-align: right;
-  background: transparent;
-  border: 0;
-  transition: font-weight 0.2s;
-
-  &:hover {
-    font-weight: bold;
   }
 `;

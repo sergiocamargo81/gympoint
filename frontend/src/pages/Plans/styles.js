@@ -66,8 +66,6 @@ export const PlansTable = styled.table`
 
   > thead {
     > tr {
-      width: 900;
-
       > th {
         text-align: left;
         font-size: 16px;
@@ -173,8 +171,8 @@ export const PlansTable = styled.table`
       }
     }
 
-    tr:last-child {
-      td {
+    > tr:last-child {
+      > td {
         border-bottom: 0;
       }
     }

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import PropTypes from 'prop-types';
+
 import Modal from 'react-modal';
 import { Container } from './styles';
 
@@ -23,7 +25,7 @@ export default function Answering(props) {
   }
 
   function handleAnswer() {
-    props.onAnswered(helpOrder);
+    props.onAnswer(helpOrder);
   }
 
   return (
@@ -66,3 +68,9 @@ export default function Answering(props) {
     </>
   );
 }
+
+Answering.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  helpOrder: PropTypes.string.isRequired,
+  onAnswer: PropTypes.func.isRequired,
+};

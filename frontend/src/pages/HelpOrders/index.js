@@ -76,7 +76,7 @@ export default function HelpOrders() {
       <Answering
         isOpen={answering.isOpen}
         helpOrder={answering.helpOrder}
-        onAnswered={removeHelpOrder}
+        onAnswer={removeHelpOrder}
       />
     </Container>
   );

@@ -3,10 +3,15 @@ import { Switch } from 'react-router-dom';
 import Route from './Route';
 
 import SignIn from '~/pages/SignIn';
+
 import Students from '~/pages/Students';
 import Student from '~/pages/Student';
+
 import Plans from '~/pages/Plans';
+import Plan from '~/pages/Plan';
+
 import Memberships from '~/pages/Memberships';
+
 import HelpOrders from '~/pages/HelpOrders';
 
 export default function Routes() {
@@ -18,7 +23,10 @@ export default function Routes() {
       <Route path="/student" component={Student} isPrivate />
 
       <Route path="/plans" component={Plans} isPrivate />
+      <Route path="/plan" component={Plan} isPrivate />
+
       <Route path="/memberships" component={Memberships} isPrivate />
+
       <Route path="/help-orders" component={HelpOrders} isPrivate />
     </Switch>
   );

@@ -1,15 +1,99 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { MdAdd } from 'react-icons/md';
+
+import api from '~/services/api';
+
+import history from '~/services/history';
+
+import Pagination from '~/components/Pagination';
+
+import Confirm from '~/components/Confirm';
 
 import { Container, Panel, Content, PlansTable } from './styles';
 
 export default function Plans() {
+  const [plans, setPlans] = useState([]);
+
+  const [page, setPage] = useState({
+    index: 1,
+    total: 1,
+    size: 10,
+  });
+
+  const [deleted, setDeleted] = useState({});
+
+  const [confirm, setConfirm] = useState({ isOpen: false, id: 0 });
+
+  useEffect(() => {
+    async function loadPlans() {
+      const uri = `plans`;
+
+      const response = await api.get(
+        `${uri}?page=${page.index}&pageSize=${page.size}`
+      );
+
+      setPage(response.data.page);
+
+      const formattedPlans = response.data.plans.map(p => ({
+        ...p,
+        priceFormatted: new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        }).format(p.price),
+        durationFormatted: p.duration === 1 ? '1 mês' : `${p.duration} meses`,
+      }));
+
+      setPlans(formattedPlans);
+    }
+
+    loadPlans();
+  }, [page.index, page.size, deleted]);
+
+  function handlePageChange(p) {
+    setPage(p);
+  }
+
+  function handleDelete(id) {
+    setConfirm({ isOpen: true, id });
+  }
+
+  async function deletePlan(id) {
+    if (id > 0) {
+      const response = await api.delete(`plans/${id}`);
+
+      setDeleted(response);
+    }
+  }
+
+  function handleEdit(plan) {
+    history.push({
+      pathname: `plan`,
+      state: {
+        plan,
+      },
+    });
+  }
+
+  function handleCreate() {
+    history.push({
+      pathname: 'plan',
+      state: {
+        plan: {
+          id: null,
+          title: '',
+          duration: '',
+          price: '',
+        },
+      },
+    });
+  }
+
   return (
     <Container>
       <Panel>
         <span>Gerenciando planos</span>
-        <button type="button">
+        <button type="button" onClick={handleCreate}>
           <MdAdd size={20} />
           <span>Cadastrar</span>
         </button>
@@ -28,48 +112,35 @@ export default function Plans() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Start</td>
-              <td>1 mês</td>
-              <td />
-              <td>R$129,00</td>
-              <td />
-              <td>
-                <button type="button">editar</button>
-              </td>
-              <td>
-                <button type="button">apagar</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Gold</td>
-              <td>3 meses</td>
-              <td />
-              <td>R$109,00</td>
-              <td />
-              <td>
-                <button type="button">editar</button>
-              </td>
-              <td>
-                <button type="button">apagar</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Diamond</td>
-              <td>6 meses</td>
-              <td />
-              <td>R$89,00</td>
-              <td />
-              <td>
-                <button type="button">editar</button>
-              </td>
-              <td>
-                <button type="button">apagar</button>
-              </td>
-            </tr>
+            {plans.map(p => (
+              <tr key={p.id}>
+                <td>{p.title}</td>
+                <td>{p.durationFormatted}</td>
+                <td />
+                <td>{p.priceFormatted}</td>
+                <td />
+                <td>
+                  <button type="button" onClick={() => handleEdit(p)}>
+                    editar
+                  </button>
+                </td>
+                <td>
+                  <button type="button" onClick={() => handleDelete(p.id)}>
+                    apagar
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </PlansTable>
+        <Pagination page={page} onChange={handlePageChange} />
       </Content>
+      <Confirm
+        isOpen={confirm.isOpen}
+        question="Apagar Plano?"
+        onClose={() => setConfirm({ ...confirm, isOpen: false })}
+        onConfirm={() => deletePlan(confirm.id)}
+      />
     </Container>
   );
 }

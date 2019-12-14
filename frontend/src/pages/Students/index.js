@@ -14,12 +14,15 @@ import { Container, Panel, Content, StudentsTable } from './styles';
 
 export default function Students() {
   const [students, setStudents] = useState([]);
+
   const [nameFilter, setNameFilter] = useState('');
+
   const [page, setPage] = useState({
     index: 1,
     total: 1,
     size: 10,
   });
+
   const [deleted, setDeleted] = useState({});
 
   const [confirm, setConfirm] = useState({ isOpen: false, id: 0 });
@@ -90,7 +93,7 @@ export default function Students() {
     <Container>
       <Panel>
         <span>Gerenciando alunos</span>
-        <button type="button" onClick={() => handleCreate()}>
+        <button type="button" onClick={handleCreate}>
           <MdAdd size={20} />
           <span>Cadastrar</span>
         </button>

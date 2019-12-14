@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { toast } from 'react-toastify';
 
 import * as Yup from 'yup';
@@ -10,6 +11,7 @@ import { MdChevronLeft, MdCheck } from 'react-icons/md';
 import { Form, Input } from '@rocketseat/unform';
 
 import PropTypes from 'prop-types';
+
 import api from '~/services/api';
 
 import { Container, Panel, StudentData } from './styles';
@@ -24,7 +26,7 @@ const schema = Yup.object().shape({
     .positive('A idade deve ser positiva')
     .integer('A idade deve ser inteira'),
   weight: Yup.number()
-    .typeError('O peso deve ser numérica')
+    .typeError('O peso deve ser numérico')
     .positive('O peso deve ser positivo'),
   height: Yup.number()
     .typeError('A altura deve ser numérica')
@@ -68,7 +70,7 @@ export default function Student({ history }) {
       .catch(_catch);
   }
 
-  const title = student.id ? 'Edição de Aluno' : 'Cadastro de Aluno';
+  const title = student.id ? 'Edição de aluno' : 'Cadastro de aluno';
 
   return (
     <Container>

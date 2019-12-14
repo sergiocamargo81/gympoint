@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import { MdAdd, MdSearch } from 'react-icons/md';
 
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
-
 import api from '~/services/api';
 
 import history from '~/services/history';
@@ -24,6 +21,8 @@ export default function Students() {
     size: 10,
   });
   const [deleted, setDeleted] = useState({});
+
+  const [confirm, setConfirm] = useState({ isOpen: false, id: 0 });
 
   useEffect(() => {
     async function loadStudents() {
@@ -50,30 +49,16 @@ export default function Students() {
     setNameFilter(e.target.value);
   }
 
-  async function handleClickDelete(id) {
-    if (id) {
+  function handleDelete(id) {
+    setConfirm({ isOpen: true, id });
+  }
+
+  async function deleteStudent(id) {
+    if (id > 0) {
       const response = await api.delete(`students/${id}`);
 
       setDeleted(response);
     }
-  }
-
-  function handleDelete(id) {
-    confirmAlert({
-      childrenElement: () => <div />,
-      customUI: parent => (
-        <Confirm
-          question="Apagar aluno?"
-          onConfirm={() => handleClickDelete(id)}
-          onClose={parent.onClose}
-        />
-      ),
-      closeOnEscape: true,
-      closeOnClickOutside: true,
-      willUnmount: () => {},
-      onClickOutside: () => {},
-      onKeypressEscape: () => {},
-    });
   }
 
   function handleEdit(student) {
@@ -155,6 +140,12 @@ export default function Students() {
         </StudentsTable>
         <Pagination page={page} onChange={handlePageChange} />
       </Content>
+      <Confirm
+        isOpen={confirm.isOpen}
+        question="Apagar Aluno?"
+        onClose={() => setConfirm({ ...confirm, isOpen: false })}
+        onConfirm={() => deleteStudent(confirm.id)}
+      />
     </Container>
   );
 }

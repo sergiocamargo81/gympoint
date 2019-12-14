@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import ReactModal from 'react-modal';
+import Modal from 'react-modal';
 import { Container } from './styles';
 
-ReactModal.setAppElement('#root');
+Modal.setAppElement('#root');
 
 export default function Answering(props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +28,7 @@ export default function Answering(props) {
 
   return (
     <>
-      <ReactModal
+      <Modal
         style={{
           content: {
             top: '50%',
@@ -62,7 +62,7 @@ export default function Answering(props) {
             Responder aluno
           </button>
         </Container>
-      </ReactModal>
+      </Modal>
     </>
   );
 }

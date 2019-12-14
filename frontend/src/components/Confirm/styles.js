@@ -1,12 +1,9 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
 
-export const ConfirmUi = styled.div`
+export const Container = styled.div`
   text-align: center;
-  width: 400px;
-  padding: 40px;
   background: #fff;
-  box-shadow: 0 20px 75px rgba(0, 0, 0, 0.23);
   color: #444444;
 
   > h1 {

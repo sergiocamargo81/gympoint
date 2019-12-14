@@ -3,7 +3,19 @@ import Plan from '../models/Plan';
 
 class PlanController {
   async index(req, res) {
-    const plans = await Plan.findAll({
+    const page =
+      !req.query.page || Number.isNaN(req.query.page)
+        ? 1
+        : parseInt(req.query.page, 10);
+
+    const pageSize =
+      !req.query.pageSize || Number.isNaN(req.query.pageSize)
+        ? 10
+        : parseInt(req.query.pageSize, 10);
+
+    const result = await Plan.findAndCountAll({
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
       attributes: [
         'id',
         'title',
@@ -12,9 +24,19 @@ class PlanController {
         'created_at',
         'updated_at',
       ],
+      order: ['id'],
     });
 
-    return res.json(plans);
+    return res.json({
+      page: {
+        index: page,
+        total:
+          parseInt(result.count / pageSize, 10) +
+          (result.count % pageSize > 0 ? 1 : 0),
+        size: pageSize,
+      },
+      plans: result.rows,
+    });
   }
 
   async store(req, res) {

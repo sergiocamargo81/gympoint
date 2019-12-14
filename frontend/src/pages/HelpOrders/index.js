@@ -1,8 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Container, Panel, Content, HelpOrdersTable } from './styles';
 
+import Answering from './Answering';
+
+import api from '~/services/api';
+
 export default function HelpOrders() {
+  const [helpOrders, setHelpOrders] = useState([]);
+  const [answering, setAnswering] = useState({
+    isOpen: false,
+    helpOrder: { question: '', answer: '' },
+  });
+
+  useEffect(() => {
+    async function loadHelpOrders() {
+      const response = await api.get('help-orders/unanswer');
+
+      setHelpOrders(response.data);
+    }
+
+    loadHelpOrders();
+  }, []);
+
+  function handleAnswering(helpOrder) {
+    setAnswering({
+      isOpen: true,
+      helpOrder,
+    });
+  }
+
+  function removeHelpOrder(helpOrder) {
+    const filteredHelpOrders = helpOrders.filter(
+      item => item.id !== helpOrder.id
+    );
+
+    setHelpOrders(filteredHelpOrders);
+
+    setAnswering({
+      isOpen: false,
+      helpOrder: { question: '', answer: '' },
+    });
+  }
+
   return (
     <Container>
       <Panel>
@@ -17,27 +57,27 @@ export default function HelpOrders() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Sérgio Camargo</td>
-              <td>
-                <button type="button">responder</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Sérgio Camargo</td>
-              <td>
-                <button type="button">responder</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Antonio de Camargo</td>
-              <td>
-                <button type="button">responder</button>
-              </td>
-            </tr>
+            {helpOrders.map(helpOrder => (
+              <tr key={helpOrder.id}>
+                <td>{helpOrder.student.name}</td>
+                <td>
+                  <button
+                    type="button"
+                    onClick={() => handleAnswering(helpOrder)}
+                  >
+                    responder
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </HelpOrdersTable>
       </Content>
+      <Answering
+        isOpen={answering.isOpen}
+        helpOrder={answering.helpOrder}
+        onAnswered={removeHelpOrder}
+      />
     </Container>
   );
 }

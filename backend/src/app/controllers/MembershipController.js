@@ -10,7 +10,19 @@ import Queue from '../../lib/Queue';
 
 class MembershipController {
   async index(req, res) {
-    const memberships = await Membership.findAll({
+    const page =
+      !req.query.page || Number.isNaN(req.query.page)
+        ? 1
+        : parseInt(req.query.page, 10);
+
+    const pageSize =
+      !req.query.pageSize || Number.isNaN(req.query.pageSize)
+        ? 10
+        : parseInt(req.query.pageSize, 10);
+
+    const result = await Membership.findAndCountAll({
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
       attributes: [
         'id',
         'start_date',
@@ -33,7 +45,16 @@ class MembershipController {
       order: ['id'],
     });
 
-    return res.json(memberships);
+    return res.json({
+      page: {
+        index: page,
+        total:
+          parseInt(result.count / pageSize, 10) +
+          (result.count % pageSize > 0 ? 1 : 0),
+        size: pageSize,
+      },
+      memberships: result.rows,
+    });
   }
 
   async store(req, res) {

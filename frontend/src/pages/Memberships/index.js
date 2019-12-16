@@ -131,7 +131,7 @@ export default function Memberships() {
                 <td>{m.endDateFormatted}</td>
                 <td> </td>
                 <td>
-                  <MdCheck size={20} className="active" />
+                  <MdCheck size={20} className={m.active ? 'active' : ''} />
                 </td>
                 <td> </td>
                 <td>

@@ -11,6 +11,7 @@ import Plans from '~/pages/Plans';
 import Plan from '~/pages/Plan';
 
 import Memberships from '~/pages/Memberships';
+import Membership from '~/pages/Membership';
 
 import HelpOrders from '~/pages/HelpOrders';
 
@@ -26,6 +27,7 @@ export default function Routes() {
       <Route path="/plan" component={Plan} isPrivate />
 
       <Route path="/memberships" component={Memberships} isPrivate />
+      <Route path="/membership" component={Membership} isPrivate />
 
       <Route path="/help-orders" component={HelpOrders} isPrivate />
     </Switch>

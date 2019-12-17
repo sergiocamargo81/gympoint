@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
+import AsyncSelect from 'react-select/async';
+import DatePicker from 'react-datepicker';
 
 export const Container = styled.div`
   width: 900px;
@@ -84,25 +86,6 @@ export const MembershipData = styled.div`
     margin-bottom: 14px;
   }
 
-  /* Aluno */
-  > label:nth-child(1) {
-    > div {
-      margin: 6px 0 6px 0;
-
-      > div {
-        height: 45px;
-
-        > div:nth-child(1) {
-          /* placeholder */
-          > div {
-            font-size: 16px;
-            font-weight: normal;
-          }
-        }
-      }
-    }
-  }
-
   > div {
     display: flex;
     flex-direction: row;
@@ -110,62 +93,89 @@ export const MembershipData = styled.div`
 
     > label {
       width: 195px;
-
-      > div > div > input:first-child {
-        width: 195px;
-        font-size: 16px;
-        padding: 12px;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        margin: 6px 0 6px 0;
-        max-height: 45px;
-        color: #444;
-
-        &::placeholder {
-          color: #999;
-        }
-      }
-
-      > span:first-child {
-        width: 195px;
-        font-size: 16px;
-        flex-grow: 1;
-        padding: 12px;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        margin: 6px 0 6px 0;
-        max-height: 45px;
-        color: #444;
-        font-weight: normal;
-        display: block;
-        background: #f5f5f5;
-      }
-    }
-
-    /* Plano */
-    > label:nth-child(1) {
-      > div {
-        width: 195px;
-        margin: 6px 0 6px 0;
-
-        > div {
-          height: 45px;
-
-          > div:nth-child(1) {
-            /* placeholder */
-            > div {
-              font-size: 16px;
-              font-weight: normal;
-            }
-          }
-        }
-      }
-    }
-
-    /* Data de início */
-    > label:nth-child(2) {
-      > div {
-      }
     }
   }
+`;
+
+export const AsyncSelectStudent = styled(AsyncSelect).attrs(props => ({
+  className: 'select-student-container',
+  classNamePrefix: 'select-student',
+}))`
+  margin: 6px 0 6px 0;
+
+  .select-student__control {
+    height: 45px;
+
+    border: 1px solid #ddd;
+    box-shadow: none;
+    &:hover {
+      border: 1px solid #ddd;
+    }
+  }
+
+  .select-student__placeholder {
+    font-size: 16px;
+    font-weight: normal;
+  }
+
+  .select-student__loading-indicator {
+    display: none;
+  }
+`;
+
+export const AsyncSelectPlan = styled(AsyncSelect).attrs(props => ({
+  className: 'select-plan-container',
+  classNamePrefix: 'select-plan',
+}))`
+  margin: 6px 0 6px 0;
+
+  .select-plan__control {
+    height: 45px;
+    width: 195px;
+
+    border: 1px solid #ddd;
+    box-shadow: none;
+    &:hover {
+      border: 1px solid #ddd;
+    }
+  }
+
+  .select-plan__placeholder {
+    font-size: 16px;
+    font-weight: normal;
+  }
+
+  .select-plan__loading-indicator {
+    display: none;
+  }
+`;
+
+export const DatePickerStart = styled(DatePicker)`
+  width: 195px;
+  font-size: 16px;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin: 6px 0 6px 0;
+  max-height: 45px;
+  color: #444;
+
+  &::placeholder {
+    color: #999;
+  }
+`;
+
+export const InputDisabled = styled.span`
+  width: 195px;
+  font-size: 16px;
+  flex-grow: 1;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin: 6px 0 6px 0;
+  max-height: 45px;
+  color: #444;
+  font-weight: normal;
+  display: block;
+  background: #f5f5f5;
 `;

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffects, useMemo } from 'react';
 
 import { toast } from 'react-toastify';
 
@@ -18,11 +18,19 @@ import pt from 'date-fns/locale/pt';
 
 import api from '~/services/api';
 
-import { Container, Panel, MembershipData } from './styles';
+import {
+  Container,
+  Panel,
+  MembershipData,
+  AsyncSelectStudent,
+  AsyncSelectPlan,
+  DatePickerStart,
+  InputDisabled,
+} from './styles';
 
 registerLocale('pt', pt);
 
-const reactSelectStudentOptions = inputValue => {
+const optionsStudent = inputValue => {
   if (!inputValue) {
     return new Promise(resolve => {
       setTimeout(() => {
@@ -42,7 +50,7 @@ const reactSelectStudentOptions = inputValue => {
     .catch(error => toast.error(error.toString()));
 };
 
-const reactSelectPlanOptions = inputValue => {
+const optionsPlan = inputValue => {
   if (!inputValue) {
     return new Promise(resolve => {
       setTimeout(() => {
@@ -56,14 +64,21 @@ const reactSelectPlanOptions = inputValue => {
     .then(response =>
       response.data.plans.map(s => ({
         value: s.id,
-        label: s.name,
+        label: s.title,
       }))
     )
     .catch(error => toast.error(error.toString()));
 };
 
 export default function Membership({ history }) {
-  const { membership } = history.location.state;
+  // const { membership } = history.location.state;
+
+  const [membership, setMembership] = useState({
+    id: 0,
+    student_id: 0,
+    plan_id: 0,
+    start_date: new Date(),
+  });
 
   async function handleSubmit({ student_id, plan_id, start_date }) {
     const id = Number(membership.id);
@@ -96,45 +111,13 @@ export default function Membership({ history }) {
       .catch(_catch);
   }
 
-  /*
-  const total = useMemo(
-    () =>
-      new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-      }).format(membership.plan.duration * membership.plan.price),
-    [membership.plan.duration, membership.plan.price]
-  );
-  */
-
   const title = membership.id ? 'Edição de matrícula' : 'Cadastro de matrícula';
 
   const handleInputChange = newValue => {
     const inputValue = newValue.replace(/\W/g, '');
 
-    return inputValue;
+    return newValue;
   };
-
-  /*
-  const filterStudents = inputValue => {
-    async function loadStudents() {
-      const response = await api.get(
-        `students/?nameFilter=${inputValue}&page=1&pageSize=10`
-      );
-
-      return response.data.students;
-    }
-
-    return loadStudents();
-  };
-
-  const loadOptions = inputValue =>
-    new Promise(resolve => {
-      setTimeout(() => {
-        resolve(filterStudents(inputValue));
-      }, 100);
-    });
-  */
 
   return (
     <Container>
@@ -154,9 +137,9 @@ export default function Membership({ history }) {
       <MembershipData>
         <label>
           ALUNO
-          <AsyncSelect
+          <AsyncSelectStudent
             cacheOptions
-            loadOptions={reactSelectStudentOptions}
+            loadOptions={optionsStudent}
             defaultOptions
             onInputChange={handleInputChange}
             loadingMessage={() => 'Buscando alunos...'}
@@ -166,18 +149,18 @@ export default function Membership({ history }) {
         <div>
           <label>
             PLANO
-            <AsyncSelect
+            <AsyncSelectPlan
               cacheOptions
-              loadOptions={reactSelectPlanOptions}
+              loadOptions={optionsPlan}
               defaultOptions
               onInputChange={handleInputChange}
               loadingMessage={() => 'Buscando planos...'}
-              placeholder="Selecione"
+              placeholder="Selecione o plano"
             />
           </label>
           <label>
             DATA DE INÍCIO
-            <DatePicker
+            <DatePickerStart
               locale="pt"
               placeholderText="Escolha a data"
               // selected={this.state.startDate}
@@ -186,14 +169,27 @@ export default function Membership({ history }) {
           </label>
           <label>
             DATA DE TÉRMINO
-            <span>{0}</span>
+            <InputDisabled>{0}</InputDisabled>
           </label>
           <label>
             VALOR FINAL
-            <span>{0}</span>
+            <InputDisabled>{0}</InputDisabled>
           </label>
         </div>
       </MembershipData>
     </Container>
   );
 }
+
+Membership.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    location: PropTypes.shape({
+      state: PropTypes.shape({
+        membership: PropTypes.shape({
+          id: PropTypes.number,
+        }),
+      }),
+    }),
+  }).isRequired,
+};

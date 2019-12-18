@@ -66,9 +66,7 @@ export default function Membership({ history }) {
   const [plans, setPlans] = useState([]);
 
   const [errorStudent, setErrorStudent] = useState('');
-
   const [errorPlan, setErrorPlan] = useState('');
-
   const [errorStartDate, setErrorStartDate] = useState('');
 
   useEffect(() => {

@@ -133,18 +133,18 @@ export default function Plan({ history }) {
       <PlanData>
         <label>
           TÍTULO DO PLANO
-          <input type="text" onChange={onChangeTitle} />
+          <input value={title} type="text" onChange={onChangeTitle} />
           {errorTitle && <span className="error">{errorTitle}</span>}
         </label>
         <div>
           <label>
             DURAÇÃO (em meses)
-            <input type="text" onChange={onChangeDuration} />
+            <input value={duration} type="text" onChange={onChangeDuration} />
             {errorDuration && <span className="error">{errorDuration}</span>}
           </label>
           <label>
             PREÇO MENSAL
-            <input type="text" onChange={onChangePrice} />
+            <input value={price} type="text" onChange={onChangePrice} />
             {errorPrice && <span className="error">{errorPrice}</span>}
           </label>
           <label>

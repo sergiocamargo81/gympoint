@@ -95,14 +95,6 @@ export default function Plans() {
   function handleCreate() {
     history.push({
       pathname: 'plan',
-      state: {
-        plan: {
-          id: null,
-          title: '',
-          duration: 0,
-          price: '0',
-        },
-      },
     });
   }
 

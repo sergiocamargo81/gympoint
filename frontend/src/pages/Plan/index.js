@@ -121,6 +121,9 @@ Plan.propTypes = {
       state: PropTypes.shape({
         plan: PropTypes.shape({
           id: PropTypes.number,
+          title: PropTypes.string,
+          duration: PropTypes.number,
+          price: PropTypes.string,
         }),
       }),
     }),

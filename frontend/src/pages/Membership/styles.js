@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
+import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import DatePicker from 'react-datepicker';
 
@@ -95,9 +96,13 @@ export const MembershipData = styled.div`
       width: 195px;
     }
   }
+
+  .error {
+    color: red;
+  }
 `;
 
-export const AsyncSelectStudent = styled(AsyncSelect).attrs(props => ({
+export const AsyncSelectStudent = styled(AsyncSelect).attrs(() => ({
   className: 'select-student-container',
   classNamePrefix: 'select-student',
 }))`
@@ -123,7 +128,7 @@ export const AsyncSelectStudent = styled(AsyncSelect).attrs(props => ({
   }
 `;
 
-export const AsyncSelectPlan = styled(AsyncSelect).attrs(props => ({
+export const SelectPlan = styled(Select).attrs(() => ({
   className: 'select-plan-container',
   classNamePrefix: 'select-plan',
 }))`

@@ -1,4 +1,6 @@
-import React, { useState, useEffects, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+
+import { addMonths, parseISO, format } from 'date-fns';
 
 import { toast } from 'react-toastify';
 
@@ -10,9 +12,7 @@ import { MdChevronLeft, MdCheck } from 'react-icons/md';
 
 import PropTypes from 'prop-types';
 
-import AsyncSelect from 'react-select/async';
-
-import DatePicker, { registerLocale } from 'react-datepicker';
+import { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import pt from 'date-fns/locale/pt';
 
@@ -23,7 +23,7 @@ import {
   Panel,
   MembershipData,
   AsyncSelectStudent,
-  AsyncSelectPlan,
+  SelectPlan,
   DatePickerStart,
   InputDisabled,
 } from './styles';
@@ -41,83 +41,159 @@ const optionsStudent = inputValue => {
 
   return api
     .get(`students/?nameFilter=${inputValue}&page=1&pageSize=10`)
-    .then(response =>
-      response.data.students.map(s => ({
-        value: s.id,
-        label: s.name,
-      }))
-    )
-    .catch(error => toast.error(error.toString()));
-};
-
-const optionsPlan = inputValue => {
-  if (!inputValue) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve([]);
-      }, 1000);
-    });
-  }
-
-  return api
-    .get(`plans/?nameFilter=${inputValue}&page=1&pageSize=10`)
-    .then(response =>
-      response.data.plans.map(s => ({
-        value: s.id,
-        label: s.title,
-      }))
-    )
+    .then(response => response.data.students)
     .catch(error => toast.error(error.toString()));
 };
 
 export default function Membership({ history }) {
-  // const { membership } = history.location.state;
-
   const [membership, setMembership] = useState({
     id: 0,
-    student_id: 0,
-    plan_id: 0,
     start_date: new Date(),
   });
 
-  async function handleSubmit({ student_id, plan_id, start_date }) {
-    const id = Number(membership.id);
+  const [plan, setPlan] = useState({
+    id: 0,
+    title: '',
+    duration: 0,
+    price: 0,
+  });
 
-    const _then = () => history.push('memberships');
+  const [student, setStudent] = useState({
+    id: 0,
+    name: '',
+  });
 
-    const _catch = e => {
-      let message;
+  const [plans, setPlans] = useState([]);
 
-      if (e.response) {
-        message = e.response.data.error;
-      } else if (e.request) {
-        message = e.request.toString();
-      } else {
-        message = e.message;
+  const [errorStudent, setErrorStudent] = useState('');
+
+  const [errorPlan, setErrorPlan] = useState('');
+
+  const [errorStartDate, setErrorStartDate] = useState('');
+
+  useEffect(() => {
+    async function loadPlans() {
+      const responsePlans = await api
+        .get(`plans/?page=1&pageSize=9999999`)
+        .then(response => response.data.plans);
+
+      setPlans(responsePlans);
+    }
+
+    loadPlans();
+  }, []);
+
+  useEffect(() => {
+    if (history.location.state && history.location.state.membership) {
+      const params = history.location.state.membership;
+
+      setMembership({
+        id: params.id,
+        start_date: parseISO(params.start_date),
+      });
+
+      if (params.plan) {
+        setPlan({
+          id: params.plan.id,
+          title: params.plan.title,
+          duration: params.plan.duration,
+          price: params.plan.price,
+        });
       }
 
-      toast.error(message);
+      if (params.student) {
+        setStudent({
+          id: params.student.id,
+          name: params.student.name,
+        });
+      }
+    }
+  }, [history.location.state]);
+
+  const formattedEndDate = useMemo(() => {
+    const endDate = addMonths(membership.start_date, plan.duration);
+
+    return format(endDate, 'd/MM/yyyy');
+  }, [membership, plan.duration]);
+
+  const formattedTotalPrice = useMemo(
+    () =>
+      new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      }).format(plan.duration * plan.price),
+    [plan.duration, plan.price]
+  );
+
+  function isValid(membershipChanged) {
+    const schema = Yup.object().shape({
+      student_id: Yup.number().typeError(() =>
+        setErrorStudent('O aluno é obrigatório')
+      ),
+      plan_id: Yup.number().typeError(() =>
+        setErrorPlan('O plano é obrigatório')
+      ),
+      start_date: Yup.date().typeError(() =>
+        setErrorStartDate('A data é obrigatória')
+      ),
+    });
+
+    return schema.isValidSync(membershipChanged);
+  }
+
+  async function save() {
+    const membershipChanged = {
+      id: membership.id,
+      student_id: student.id,
+      plan_id: plan.id,
+      start_date: membership.start_date,
     };
 
-    await (id
-      ? api.put('memberships/', {
-          student_id,
-          plan_id,
-          start_date,
-        })
-      : api.post('memberships/', { student_id, plan_id, start_date })
-    )
-      .then(_then)
-      .catch(_catch);
+    if (isValid(membershipChanged)) {
+      const _then = () => history.push('memberships');
+
+      const _catch = e => {
+        let message;
+
+        if (e.response) {
+          message = e.response.data.error;
+        } else if (e.request) {
+          message = e.request.toString();
+        } else {
+          message = e.message;
+        }
+
+        toast.error(message);
+      };
+
+      await (membershipChanged.id
+        ? api.put('memberships/', membershipChanged)
+        : api.post('memberships/', membershipChanged)
+      )
+        .then(_then)
+        .catch(_catch);
+    }
+  }
+
+  function onChangeStudent(s) {
+    setStudent(s);
+
+    setErrorStudent('');
+  }
+
+  function onChangePlan(p) {
+    setPlan(p);
+
+    setErrorPlan('');
+  }
+
+  function onChangeStartDate(date) {
+    setMembership({ ...membership, start_date: date });
+
+    setErrorStartDate('');
   }
 
   const title = membership.id ? 'Edição de matrícula' : 'Cadastro de matrícula';
-
-  const handleInputChange = newValue => {
-    const inputValue = newValue.replace(/\W/g, '');
-
-    return newValue;
-  };
 
   return (
     <Container>
@@ -129,7 +205,7 @@ export default function Membership({ history }) {
             <span>voltar</span>
           </button>
         </Link>
-        <button type="submit" className="save">
+        <button type="button" className="save" onClick={save}>
           <MdCheck size={20} />
           <span>salvar</span>
         </button>
@@ -138,42 +214,52 @@ export default function Membership({ history }) {
         <label>
           ALUNO
           <AsyncSelectStudent
-            cacheOptions
             loadOptions={optionsStudent}
+            getOptionValue={option => option}
+            getOptionLabel={option => option.name}
+            defaultValue={student}
+            value={student}
             defaultOptions
-            onInputChange={handleInputChange}
             loadingMessage={() => 'Buscando alunos...'}
             placeholder="Buscar aluno"
+            onChange={onChangeStudent}
           />
+          {errorStudent && <span className="error">{errorStudent}</span>}
         </label>
         <div>
           <label>
             PLANO
-            <AsyncSelectPlan
-              cacheOptions
-              loadOptions={optionsPlan}
+            <SelectPlan
+              options={plans}
+              getOptionValue={option => option}
+              getOptionLabel={option => option.title}
+              defaultValue={plan}
+              value={plan}
               defaultOptions
-              onInputChange={handleInputChange}
               loadingMessage={() => 'Buscando planos...'}
               placeholder="Selecione o plano"
+              onChange={onChangePlan}
             />
+            {errorPlan && <span className="error">{errorPlan}</span>}
           </label>
           <label>
             DATA DE INÍCIO
             <DatePickerStart
               locale="pt"
+              selected={membership.start_date}
               placeholderText="Escolha a data"
-              // selected={this.state.startDate}
-              // onChange={this.handleChange}
+              dateFormat="d/MM/yyyy"
+              onChange={onChangeStartDate}
             />
+            {errorStartDate && <span className="error">{errorStartDate}</span>}
           </label>
           <label>
             DATA DE TÉRMINO
-            <InputDisabled>{0}</InputDisabled>
+            <InputDisabled>{formattedEndDate}</InputDisabled>
           </label>
           <label>
             VALOR FINAL
-            <InputDisabled>{0}</InputDisabled>
+            <InputDisabled>{formattedTotalPrice}</InputDisabled>
           </label>
         </div>
       </MembershipData>
@@ -188,6 +274,17 @@ Membership.propTypes = {
       state: PropTypes.shape({
         membership: PropTypes.shape({
           id: PropTypes.number,
+          start_date: PropTypes.string,
+          plan: PropTypes.shape({
+            id: PropTypes.number,
+            title: PropTypes.string,
+            duration: PropTypes.number,
+            price: PropTypes.string,
+          }),
+          student: PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string,
+          }),
         }),
       }),
     }),

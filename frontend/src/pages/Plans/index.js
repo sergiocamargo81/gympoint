@@ -29,9 +29,18 @@ export default function Plans() {
     async function loadPlans() {
       const uri = `plans`;
 
-      const response = await api.get(
+      let response = await api.get(
         `${uri}?page=${page.index}&pageSize=${page.size}`
       );
+
+      if (
+        response.data.plans.length === 0 &&
+        response.data.page.index > response.data.page.total
+      ) {
+        response = await api.get(
+          `${uri}?page=${page.total}&pageSize=${page.size}`
+        );
+      }
 
       setPage(response.data.page);
 
@@ -48,7 +57,7 @@ export default function Plans() {
     }
 
     loadPlans();
-  }, [page.index, page.size, deleted]);
+  }, [page.index, page.size, deleted, page.total]);
 
   function handlePageChange(p) {
     setPage(p);
@@ -82,8 +91,8 @@ export default function Plans() {
         plan: {
           id: null,
           title: '',
-          duration: '',
-          price: '',
+          duration: 0,
+          price: '0',
         },
       },
     });

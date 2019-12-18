@@ -37,9 +37,18 @@ export default function Memberships() {
     async function loadMemberships() {
       const uri = `memberships`;
 
-      const response = await api.get(
+      let response = await api.get(
         `${uri}?page=${page.index}&pageSize=${page.size}`
       );
+
+      if (
+        response.data.memberships.length === 0 &&
+        response.data.page.index > response.data.page.total
+      ) {
+        response = await api.get(
+          `${uri}?page=${page.total}&pageSize=${page.size}`
+        );
+      }
 
       setPage(response.data.page);
 
@@ -53,7 +62,7 @@ export default function Memberships() {
     }
 
     loadMemberships();
-  }, [page.index, page.size, deleted]);
+  }, [page.index, page.size, deleted, page.total]);
 
   function handlePageChange(p) {
     setPage(p);
@@ -83,14 +92,6 @@ export default function Memberships() {
   function handleCreate() {
     history.push({
       pathname: 'membership',
-      state: {
-        membership: {
-          id: null,
-          startDate: '',
-          endDate: '',
-          active: false,
-        },
-      },
     });
   }
 

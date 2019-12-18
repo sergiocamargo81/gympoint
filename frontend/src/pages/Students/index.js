@@ -31,16 +31,25 @@ export default function Students() {
     async function loadStudents() {
       const uri = `students/?nameFilter=${nameFilter}`;
 
-      const response = await api.get(
+      let response = await api.get(
         `${uri}&page=${page.index}&pageSize=${page.size}`
       );
+
+      if (
+        response.data.students.length === 0 &&
+        response.data.page.index > response.data.page.total
+      ) {
+        response = await api.get(
+          `${uri}&page=${page.total}&pageSize=${page.size}`
+        );
+      }
 
       setPage(response.data.page);
       setStudents(response.data.students);
     }
 
     loadStudents();
-  }, [nameFilter, page.index, page.size, deleted]);
+  }, [nameFilter, page.index, page.size, deleted, page.total]);
 
   function handlePageChange(p) {
     setPage(p);

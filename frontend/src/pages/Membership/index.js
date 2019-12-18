@@ -48,7 +48,7 @@ const optionsStudent = inputValue => {
 export default function Membership({ history }) {
   const [membership, setMembership] = useState({
     id: 0,
-    start_date: new Date(),
+    start_date: '',
   });
 
   const [plan, setPlan] = useState({
@@ -111,9 +111,13 @@ export default function Membership({ history }) {
   }, [history.location.state]);
 
   const formattedEndDate = useMemo(() => {
-    const endDate = addMonths(membership.start_date, plan.duration);
+    if (membership.start_date && plan.duration) {
+      const endDate = addMonths(membership.start_date, plan.duration);
 
-    return format(endDate, 'd/MM/yyyy');
+      return format(endDate, 'd/MM/yyyy');
+    }
+
+    return '';
   }, [membership, plan.duration]);
 
   const formattedTotalPrice = useMemo(
@@ -127,12 +131,12 @@ export default function Membership({ history }) {
 
   function isValid(membershipChanged) {
     const schema = Yup.object().shape({
-      student_id: Yup.number().typeError(() =>
-        setErrorStudent('O aluno é obrigatório')
-      ),
-      plan_id: Yup.number().typeError(() =>
-        setErrorPlan('O plano é obrigatório')
-      ),
+      student_id: Yup.number()
+        .typeError(() => setErrorStudent('O aluno é obrigatório'))
+        .positive(() => setErrorStudent('O aluno é obrigatório')),
+      plan_id: Yup.number()
+        .typeError(() => setErrorPlan('O plano é obrigatório'))
+        .positive(() => setErrorPlan('O plano é obrigatório')),
       start_date: Yup.date().typeError(() =>
         setErrorStartDate('A data é obrigatória')
       ),

@@ -125,7 +125,7 @@ export default function Memberships() {
             {memberships.map(m => (
               <tr key={m.id}>
                 <td>{m.student.name}</td>
-                <td>{m.plan.title}</td>
+                <td>{m.plan ? m.plan.title : ''}</td>
                 <td> </td>
                 <td>{m.startDateFormatted}</td>
                 <td> </td>

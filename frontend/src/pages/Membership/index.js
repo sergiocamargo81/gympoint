@@ -120,14 +120,16 @@ export default function Membership({ history }) {
     return '';
   }, [membership, plan.duration]);
 
-  const formattedTotalPrice = useMemo(
-    () =>
-      new Intl.NumberFormat('pt-BR', {
+  const formattedTotalPrice = useMemo(() => {
+    if (plan.duration && plan.price) {
+      return new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
-      }).format(plan.duration * plan.price),
-    [plan.duration, plan.price]
-  );
+      }).format(plan.duration * plan.price);
+    }
+
+    return '';
+  }, [plan.duration, plan.price]);
 
   function isValid(membershipChanged) {
     const schema = Yup.object().shape({

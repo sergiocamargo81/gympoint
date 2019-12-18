@@ -14,6 +14,7 @@ Modal.setAppElement('#root');
 
 export default function Answering(props) {
   const [isOpen, setIsOpen] = useState(false);
+
   const [helpOrder, setHelpOrder] = useState({ question: '', helpOrder: '' });
 
   useEffect(() => {
@@ -94,6 +95,10 @@ export default function Answering(props) {
 
 Answering.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  helpOrder: PropTypes.string.isRequired,
+  helpOrder: PropTypes.shape({
+    id: PropTypes.number,
+    question: PropTypes.string,
+    answer: PropTypes.string,
+  }).isRequired,
   onAnswer: PropTypes.func.isRequired,
 };

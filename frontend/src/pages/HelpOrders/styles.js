@@ -54,43 +54,51 @@ export const HelpOrdersTable = styled.table`
   }
 
   > tbody {
-    > tr {
-      color: #666;
-      font-size: 16px;
-
-      > td {
-        padding: 15px 0;
-        border-bottom: 1px solid #eee;
-      }
-
-      /* Aluno */
-      > td:nth-child(1) {
-        text-align: left;
-      }
-
-      /* Responder */
-      > td:nth-child(2) {
-        text-align: right;
-
-        > button {
-          font-size: 15px;
-          color: #4d85ee;
-          text-align: right;
-          background: transparent;
-          border: 0;
-          transition: font-weight 0.2s;
-
-          &:hover {
-            font-weight: bold;
-          }
-        }
-      }
-    }
-
     > tr:last-child {
       > td {
         border-bottom: 0;
       }
     }
+  }
+`;
+
+export const HelpOrderData = styled.tr`
+  color: #666;
+  font-size: 16px;
+
+  > td {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Aluno */
+  > td:nth-child(1) {
+    text-align: left;
+  }
+
+  /* Responder */
+  > td:nth-child(2) {
+    text-align: right;
+
+    > button {
+      font-size: 15px;
+      color: #4d85ee;
+      text-align: right;
+      background: transparent;
+      border: 0;
+      transition: font-weight 0.2s;
+
+      &:hover {
+        font-weight: bold;
+      }
+    }
+  }
+`;
+
+export const NoData = styled.tr`
+  > td {
+    text-align: center;
+    font-style: italic;
+    color: #666;
   }
 `;

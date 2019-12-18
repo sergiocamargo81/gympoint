@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import { Container, Panel, Content, HelpOrdersTable } from './styles';
+import {
+  Container,
+  Panel,
+  Content,
+  HelpOrdersTable,
+  HelpOrderData,
+  NoData,
+} from './styles';
 
 import Answering from './Answering';
 
@@ -57,19 +64,25 @@ export default function HelpOrders() {
             </tr>
           </thead>
           <tbody>
-            {helpOrders.map(helpOrder => (
-              <tr key={helpOrder.id}>
-                <td>{helpOrder.student.name}</td>
-                <td>
-                  <button
-                    type="button"
-                    onClick={() => handleAnswering(helpOrder)}
-                  >
-                    responder
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {helpOrders.length > 0 ? (
+              helpOrders.map(helpOrder => (
+                <HelpOrderData key={helpOrder.id}>
+                  <td>{helpOrder.student.name}</td>
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => handleAnswering(helpOrder)}
+                    >
+                      responder
+                    </button>
+                  </td>
+                </HelpOrderData>
+              ))
+            ) : (
+              <NoData>
+                <td colSpan="2">Nenhum pedido de auxílio sem resposta</td>
+              </NoData>
+            )}
           </tbody>
         </HelpOrdersTable>
       </Content>

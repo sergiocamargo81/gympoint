@@ -13,7 +13,14 @@ import Pagination from '~/components/Pagination';
 
 import Confirm from '~/components/Confirm';
 
-import { Container, Panel, Content, MembershipsTable } from './styles';
+import {
+  Container,
+  Panel,
+  Content,
+  MembershipsTable,
+  MembershipData,
+  NoData,
+} from './styles';
 
 function formatDate(date) {
   const dateParsed = parseISO(date);
@@ -122,31 +129,37 @@ export default function Memberships() {
             </tr>
           </thead>
           <tbody>
-            {memberships.map(m => (
-              <tr key={m.id}>
-                <td>{m.student ? m.student.name : ''}</td>
-                <td>{m.plan ? m.plan.title : ''}</td>
-                <td> </td>
-                <td>{m.startDateFormatted}</td>
-                <td> </td>
-                <td>{m.endDateFormatted}</td>
-                <td> </td>
-                <td>
-                  <MdCheck size={20} className={m.active ? 'active' : ''} />
-                </td>
-                <td> </td>
-                <td>
-                  <button type="button" onClick={() => handleEdit(m)}>
-                    editar
-                  </button>
-                </td>
-                <td>
-                  <button type="button" onClick={() => handleDelete(m.id)}>
-                    apagar
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {memberships.length > 0 ? (
+              memberships.map(m => (
+                <MembershipData key={m.id}>
+                  <td>{m.student ? m.student.name : ''}</td>
+                  <td>{m.plan ? m.plan.title : ''}</td>
+                  <td> </td>
+                  <td>{m.startDateFormatted}</td>
+                  <td> </td>
+                  <td>{m.endDateFormatted}</td>
+                  <td> </td>
+                  <td>
+                    <MdCheck size={20} className={m.active ? 'active' : ''} />
+                  </td>
+                  <td> </td>
+                  <td>
+                    <button type="button" onClick={() => handleEdit(m)}>
+                      editar
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" onClick={() => handleDelete(m.id)}>
+                      apagar
+                    </button>
+                  </td>
+                </MembershipData>
+              ))
+            ) : (
+              <NoData>
+                <td colSpan="11">Nenhuma matrícula encontrada</td>
+              </NoData>
+            )}
           </tbody>
         </MembershipsTable>
         <Pagination page={page} onChange={handlePageChange} />

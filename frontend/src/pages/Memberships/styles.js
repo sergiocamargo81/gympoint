@@ -136,92 +136,103 @@ export const MembershipsTable = styled.table`
   }
 
   > tbody {
-    > tr {
-      width: 1150;
-      color: #666;
-      font-size: 16px;
-
-      > td {
-        padding: 15px 0;
-        border-bottom: 1px solid #eee;
-      }
-
-      /* Aluno */
-      > td:nth-child(1) {
-        text-align: left;
-      }
-
-      /* Plano */
-      > td:nth-child(2) {
-        text-align: center;
-      }
-
-      /* Início */
-      > td:nth-child(4) {
-        text-align: center;
-      }
-
-      /* Término */
-      > td:nth-child(6) {
-        text-align: center;
-      }
-
-      /* Ativa */
-      > td:nth-child(8) {
-        text-align: center;
-
-        > svg {
-          color: #fff;
-          border-radius: 50%;
-          background: #ddd;
-        }
-
-        > svg.active {
-          background: #42cb59;
-        }
-      }
-
-      /* Editar */
-      > td:nth-child(10) {
-        text-align: right;
-
-        > button {
-          font-size: 15px;
-          color: #4d85ee;
-          text-align: right;
-          background: transparent;
-          border: 0;
-          transition: font-weight 0.2s;
-
-          &:hover {
-            font-weight: bold;
-          }
-        }
-      }
-
-      /* Apagar */
-      > td:nth-child(11) {
-        text-align: right;
-
-        > button {
-          font-size: 15px;
-          color: #de3b3b;
-          text-align: right;
-          background: transparent;
-          border: 0;
-          transition: font-weight 0.2s;
-
-          &:hover {
-            font-weight: bold;
-          }
-        }
-      }
-    }
-
     > tr:last-child {
       > td {
         border-bottom: 0;
       }
     }
+  }
+`;
+
+export const MembershipData = styled.tr`
+  width: 1150;
+  color: #666;
+  font-size: 16px;
+
+  > td {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Aluno */
+  > td:nth-child(1) {
+    text-align: left;
+  }
+
+  /* Plano */
+  > td:nth-child(2) {
+    text-align: center;
+  }
+
+  /* Início */
+  > td:nth-child(4) {
+    text-align: center;
+  }
+
+  /* Término */
+  > td:nth-child(6) {
+    text-align: center;
+  }
+
+  /* Ativa */
+  > td:nth-child(8) {
+    text-align: center;
+
+    > svg {
+      color: #fff;
+      border-radius: 50%;
+      background: #ddd;
+    }
+
+    > svg.active {
+      background: #42cb59;
+    }
+  }
+
+  /* Editar */
+  > td:nth-child(10) {
+    text-align: right;
+
+    > button {
+      font-size: 15px;
+      color: #4d85ee;
+      text-align: right;
+      background: transparent;
+      border: 0;
+      transition: font-weight 0.2s;
+
+      &:hover {
+        font-weight: bold;
+      }
+    }
+  }
+
+  /* Apagar */
+  > td:nth-child(11) {
+    text-align: right;
+
+    > button {
+      font-size: 15px;
+      color: #de3b3b;
+      text-align: right;
+      background: transparent;
+      border: 0;
+      transition: font-weight 0.2s;
+
+      &:hover {
+        font-weight: bold;
+      }
+    }
+  }
+`;
+
+export const NoData = styled.tr`
+  color: #666;
+  font-size: 16px;
+
+  > td {
+    padding: 15px 0;
+    text-align: center;
+    font-style: italic;
   }
 `;

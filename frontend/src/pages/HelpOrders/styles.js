@@ -96,9 +96,12 @@ export const HelpOrderData = styled.tr`
 `;
 
 export const NoData = styled.tr`
+  color: #666;
+  font-size: 16px;
+
   > td {
+    padding: 15px 0;
     text-align: center;
     font-style: italic;
-    color: #666;
   }
 `;

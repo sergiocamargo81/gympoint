@@ -145,7 +145,6 @@ export const MembershipsTable = styled.table`
 `;
 
 export const MembershipData = styled.tr`
-  width: 1150;
   color: #666;
   font-size: 16px;
 

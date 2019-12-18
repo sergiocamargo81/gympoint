@@ -10,7 +10,14 @@ import Pagination from '~/components/Pagination';
 
 import Confirm from '~/components/Confirm';
 
-import { Container, Panel, Content, StudentsTable } from './styles';
+import {
+  Container,
+  Panel,
+  Content,
+  StudentsTable,
+  StudentData,
+  NoData,
+} from './styles';
 
 export default function Students() {
   const [students, setStudents] = useState([]);
@@ -130,24 +137,30 @@ export default function Students() {
             </tr>
           </thead>
           <tbody>
-            {students.map(s => (
-              <tr key={s.id}>
-                <td>{s.name}</td>
-                <td>{s.email}</td>
-                <td>{s.age}</td>
-                <td />
-                <td>
-                  <button type="button" onClick={() => handleEdit(s)}>
-                    editar
-                  </button>
-                </td>
-                <td>
-                  <button type="button" onClick={() => handleDelete(s.id)}>
-                    apagar
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {students.length > 0 ? (
+              students.map(s => (
+                <StudentData key={s.id}>
+                  <td>{s.name}</td>
+                  <td>{s.email}</td>
+                  <td>{s.age}</td>
+                  <td />
+                  <td>
+                    <button type="button" onClick={() => handleEdit(s)}>
+                      editar
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" onClick={() => handleDelete(s.id)}>
+                      apagar
+                    </button>
+                  </td>
+                </StudentData>
+              ))
+            ) : (
+              <NoData>
+                <td colSpan="6">Nenhum aluno encontrado</td>
+              </NoData>
+            )}
           </tbody>
         </StudentsTable>
         <Pagination page={page} onChange={handlePageChange} />

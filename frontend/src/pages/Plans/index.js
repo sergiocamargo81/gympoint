@@ -10,7 +10,14 @@ import Pagination from '~/components/Pagination';
 
 import Confirm from '~/components/Confirm';
 
-import { Container, Panel, Content, PlansTable } from './styles';
+import {
+  Container,
+  Panel,
+  Content,
+  PlansTable,
+  PlanData,
+  NoData,
+} from './styles';
 
 export default function Plans() {
   const [plans, setPlans] = useState([]);
@@ -121,25 +128,31 @@ export default function Plans() {
             </tr>
           </thead>
           <tbody>
-            {plans.map(p => (
-              <tr key={p.id}>
-                <td>{p.title}</td>
-                <td>{p.durationFormatted}</td>
-                <td />
-                <td>{p.priceFormatted}</td>
-                <td />
-                <td>
-                  <button type="button" onClick={() => handleEdit(p)}>
-                    editar
-                  </button>
-                </td>
-                <td>
-                  <button type="button" onClick={() => handleDelete(p.id)}>
-                    apagar
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {plans.length > 0 ? (
+              plans.map(p => (
+                <PlanData key={p.id}>
+                  <td>{p.title}</td>
+                  <td>{p.durationFormatted}</td>
+                  <td />
+                  <td>{p.priceFormatted}</td>
+                  <td />
+                  <td>
+                    <button type="button" onClick={() => handleEdit(p)}>
+                      editar
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" onClick={() => handleDelete(p.id)}>
+                      apagar
+                    </button>
+                  </td>
+                </PlanData>
+              ))
+            ) : (
+              <NoData>
+                <td colSpan="7">Nenhum plano encontrado</td>
+              </NoData>
+            )}
           </tbody>
         </PlansTable>
         <Pagination page={page} onChange={handlePageChange} />

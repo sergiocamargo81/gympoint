@@ -44,7 +44,8 @@ export default function Students() {
 
       if (
         response.data.students.length === 0 &&
-        response.data.page.index > response.data.page.total
+        response.data.page.index > response.data.page.total &&
+        response.data.page.total > 0
       ) {
         response = await api.get(
           `${uri}&page=${page.total}&pageSize=${page.size}`

@@ -42,7 +42,8 @@ export default function Plans() {
 
       if (
         response.data.plans.length === 0 &&
-        response.data.page.index > response.data.page.total
+        response.data.page.index > response.data.page.total &&
+        response.data.page.total > 0
       ) {
         response = await api.get(
           `${uri}?page=${page.total}&pageSize=${page.size}`

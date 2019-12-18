@@ -11,10 +11,19 @@ import {
 
 import Answering from './Answering';
 
+import Pagination from '~/components/Pagination';
+
 import api from '~/services/api';
 
 export default function HelpOrders() {
   const [helpOrders, setHelpOrders] = useState([]);
+
+  const [page, setPage] = useState({
+    index: 1,
+    total: 1,
+    size: 10,
+  });
+
   const [answering, setAnswering] = useState({
     isOpen: false,
     helpOrder: { question: '', answer: '' },
@@ -22,13 +31,32 @@ export default function HelpOrders() {
 
   useEffect(() => {
     async function loadHelpOrders() {
-      const response = await api.get('help-orders/unanswer');
+      const uri = `help-orders/unanswer`;
 
-      setHelpOrders(response.data);
+      let response = await api.get(
+        `${uri}?page=${page.index}&pageSize=${page.size}`
+      );
+
+      if (
+        response.data.help_orders.length === 0 &&
+        response.data.page.index > response.data.page.total &&
+        response.data.page.total > 0
+      ) {
+        response = await api.get(
+          `${uri}?page=${page.total}&pageSize=${page.size}`
+        );
+      }
+
+      setPage(response.data.page);
+      setHelpOrders(response.data.help_orders);
     }
 
     loadHelpOrders();
-  }, []);
+  }, [page.index, page.size, page.total]);
+
+  function handlePageChange(p) {
+    setPage(p);
+  }
 
   function handleAnswering(helpOrder) {
     setAnswering({
@@ -85,6 +113,7 @@ export default function HelpOrders() {
             )}
           </tbody>
         </HelpOrdersTable>
+        <Pagination page={page} onChange={handlePageChange} />
       </Content>
       <Answering
         isOpen={answering.isOpen}

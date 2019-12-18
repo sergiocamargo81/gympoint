@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import { toast } from 'react-toastify';
 
@@ -8,108 +8,151 @@ import { Link } from 'react-router-dom';
 
 import { MdChevronLeft, MdCheck } from 'react-icons/md';
 
-import { Form, Input } from '@rocketseat/unform';
-
 import PropTypes from 'prop-types';
 
 import api from '~/services/api';
 
 import { Container, Panel, PlanData } from './styles';
 
-const schema = Yup.object().shape({
-  title: Yup.string().required('O título é obrigatório'),
-  duration: Yup.number()
-    .typeError('A duração deve ser numérica')
-    .positive('A duração deve ser positiva')
-    .integer('A duração deve ser inteira'),
-  price: Yup.number()
-    .typeError('O preço deve ser numérico')
-    .positive('O preço deve ser positivo'),
-});
-
 export default function Plan({ history }) {
-  const { plan } = history.location.state;
+  const [id, setId] = useState(0);
+  const [title, setTitle] = useState('');
+  const [duration, setDuration] = useState('');
+  const [price, setPrice] = useState('');
 
-  async function handleSubmit({ title, duration, price }) {
-    const id = Number(plan.id);
+  const [errorTitle, setErrorTitle] = useState('');
+  const [errorDuration, setErrorDuration] = useState('');
+  const [errorPrice, setErrorPrice] = useState('');
 
-    const _then = () => history.push('plans');
+  useEffect(() => {
+    if (history.location.state && history.location.state.plan) {
+      const params = history.location.state.plan;
 
-    const _catch = e => {
-      let message;
+      setId(params.id);
+      setTitle(params.title);
+      setDuration(params.duration);
+      setPrice(params.price);
+    }
+  }, [history.location.state]);
 
-      if (e.response) {
-        message = e.response.data.error;
-      } else if (e.request) {
-        message = e.request.toString();
-      } else {
-        message = e.message;
-      }
+  async function save() {
+    const plan = { id, title, duration, price };
 
-      toast.error(message);
-    };
+    const schema = Yup.object().shape({
+      title: Yup.string().required(() =>
+        setErrorTitle('O título é obrigatório')
+      ),
+      duration: Yup.number()
+        .typeError(() => setErrorDuration('A duração deve ser numérica'))
+        .positive(() => setErrorDuration('A duração deve ser positiva'))
+        .integer(() => setErrorDuration('A duração deve ser inteira')),
+      price: Yup.number()
+        .typeError(() => setErrorPrice('O preço deve ser numérico'))
+        .positive(() => setErrorPrice('O preço deve ser positivo')),
+    });
 
-    await (id
-      ? api.put('plans/', {
-          id,
-          title,
-          duration,
-          price,
-        })
-      : api.post('plans/', { title, duration, price })
-    )
-      .then(_then)
-      .catch(_catch);
+    if (schema.isValidSync(plan)) {
+      const _then = () => history.push('plans');
+
+      const _catch = e => {
+        let message;
+
+        if (e.response) {
+          message = e.response.data.error;
+        } else if (e.request) {
+          message = e.request.toString();
+        } else {
+          message = e.message;
+        }
+
+        toast.error(message);
+      };
+
+      await (id ? api.put('plans/', plan) : api.post('plans/', plan))
+        .then(_then)
+        .catch(_catch);
+    }
   }
 
-  const total = useMemo(
-    () =>
-      new Intl.NumberFormat('pt-BR', {
+  const total = useMemo(() => {
+    const schema = Yup.object().shape({
+      duration: Yup.number()
+        .typeError()
+        .positive()
+        .integer(),
+      price: Yup.number()
+        .typeError()
+        .positive(),
+    });
+
+    if (schema.isValidSync({ duration, price })) {
+      return new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
-      }).format(plan.duration * plan.price),
-    [plan.duration, plan.price]
-  );
+      }).format(duration * price);
+    }
 
-  const title = plan.id ? 'Edição de plano' : 'Cadastro de plano';
+    return '';
+  }, [duration, price]);
+
+  function onChangeTitle(e) {
+    setTitle(e.target.value);
+
+    setErrorTitle('');
+  }
+
+  function onChangeDuration(e) {
+    setDuration(e.target.value);
+
+    setErrorDuration('');
+  }
+
+  function onChangePrice(e) {
+    setPrice(e.target.value);
+
+    setErrorPrice('');
+  }
+
+  const titlePanel = id ? 'Edição de plano' : 'Cadastro de plano';
 
   return (
     <Container>
-      <Form initialData={plan} schema={schema} onSubmit={handleSubmit}>
-        <Panel>
-          <span>{title}</span>
-          <Link to="plans">
-            <button type="button">
-              <MdChevronLeft size={20} />
-              <span>voltar</span>
-            </button>
-          </Link>
-          <button type="submit" className="save">
-            <MdCheck size={20} />
-            <span>salvar</span>
+      <Panel>
+        <span>{titlePanel}</span>
+        <Link to="plans">
+          <button type="button">
+            <MdChevronLeft size={20} />
+            <span>voltar</span>
           </button>
-        </Panel>
-        <PlanData>
+        </Link>
+        <button type="button" className="save" onClick={save}>
+          <MdCheck size={20} />
+          <span>salvar</span>
+        </button>
+      </Panel>
+      <PlanData>
+        <label>
+          TÍTULO DO PLANO
+          <input type="text" onChange={onChangeTitle} />
+          {errorTitle && <span className="error">{errorTitle}</span>}
+        </label>
+        <div>
           <label>
-            TÍTULO DO PLANO
-            <Input name="title" type="text" />
+            DURAÇÃO (em meses)
+            <input type="text" onChange={onChangeDuration} />
+            {errorDuration && <span className="error">{errorDuration}</span>}
           </label>
-          <div>
-            <label>
-              DURAÇÃO (em meses)
-              <Input name="duration" type="text" />
-            </label>
-            <label>
-              PREÇO MENSAL
-              <Input name="price" type="text" />
-            </label>
-            <label>
-              PREÇO TOTAL
-              <span>{total}</span>
-            </label>
-          </div>
-        </PlanData>
-      </Form>
+          <label>
+            PREÇO MENSAL
+            <input type="text" onChange={onChangePrice} />
+            {errorPrice && <span className="error">{errorPrice}</span>}
+          </label>
+          <label>
+            PREÇO TOTAL
+            <span>{total}</span>
+          </label>
+        </div>
+      </PlanData>
     </Container>
   );
 }

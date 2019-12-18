@@ -3,7 +3,12 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Modal from 'react-modal';
+
+import { toast } from 'react-toastify';
+
 import { Container } from './styles';
+
+import api from '~/services/api';
 
 Modal.setAppElement('#root');
 
@@ -24,7 +29,25 @@ export default function Answering(props) {
     setHelpOrder({ ...helpOrder, answer });
   }
 
-  function handleAnswer() {
+  async function handleAnswer() {
+    const _catch = e => {
+      let message;
+
+      if (e.response) {
+        message = e.response.data.error;
+      } else if (e.request) {
+        message = e.request.toString();
+      } else {
+        message = e.message;
+      }
+
+      toast.error(message);
+    };
+
+    await api
+      .post(`/help-orders/${helpOrder.id}/answer/`, helpOrder)
+      .catch(_catch);
+
     props.onAnswer(helpOrder);
   }
 

@@ -1,9 +1,11 @@
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import logo from '~/assets/logo.png';
 
-import { Container, Image, Button, ButtonText, TextInput } from './styles';
+import { Container, Image, TextInput } from './styles';
+
+import Button from '~/components/Button';
 
 export default function SignIn() {
   return (
@@ -11,9 +13,7 @@ export default function SignIn() {
       <Image source={logo} />
       <TextInput />
       <TouchableOpacity>
-        <Button>
-          <ButtonText>Entrar no sistema</ButtonText>
-        </Button>
+        <Button>Entrar no sistema</Button>
       </TouchableOpacity>
     </Container>
   );

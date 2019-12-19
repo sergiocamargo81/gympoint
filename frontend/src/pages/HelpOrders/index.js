@@ -29,6 +29,8 @@ export default function HelpOrders() {
     helpOrder: { question: '', answer: '' },
   });
 
+  const [answered, setAnswered] = useState(null);
+
   useEffect(() => {
     async function loadHelpOrders() {
       const uri = `help-orders/unanswer`;
@@ -48,11 +50,16 @@ export default function HelpOrders() {
       }
 
       setPage(response.data.page);
-      setHelpOrders(response.data.help_orders);
+
+      const formattedHelpOrders = response.data.help_orders.map(h => {
+        return { ...h, answer: '' };
+      });
+
+      setHelpOrders(formattedHelpOrders);
     }
 
     loadHelpOrders();
-  }, [page.index, page.size, page.total]);
+  }, [page.index, page.size, page.total, answered]);
 
   function handlePageChange(p) {
     setPage(p);
@@ -66,12 +73,10 @@ export default function HelpOrders() {
   }
 
   function removeHelpOrder(helpOrder) {
-    const filteredHelpOrders = helpOrders.filter(
-      item => item.id !== helpOrder.id
-    );
+    setAnswered(helpOrder);
+  }
 
-    setHelpOrders(filteredHelpOrders);
-
+  function closeAnswering() {
     setAnswering({
       isOpen: false,
       helpOrder: { question: '', answer: '' },
@@ -119,6 +124,7 @@ export default function HelpOrders() {
         isOpen={answering.isOpen}
         helpOrder={answering.helpOrder}
         onAnswer={removeHelpOrder}
+        onClose={closeAnswering}
       />
     </Container>
   );

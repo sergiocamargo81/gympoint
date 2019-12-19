@@ -6,11 +6,16 @@ import Modal from 'react-modal';
 
 import { toast } from 'react-toastify';
 
+import * as Yup from 'yup';
 import { Container } from './styles';
 
 import api from '~/services/api';
 
 Modal.setAppElement('#root');
+
+const schema = Yup.string()
+  .trim()
+  .required();
 
 export default function Answering(props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +29,8 @@ export default function Answering(props) {
 
   function closeModal() {
     setIsOpen(false);
+
+    props.onClose();
   }
 
   function handleAnswerChange(answer) {
@@ -31,25 +38,29 @@ export default function Answering(props) {
   }
 
   async function handleAnswer() {
-    const _catch = e => {
-      let message;
+    if (schema.isValidSync(helpOrder.answer)) {
+      const _catch = e => {
+        let message;
 
-      if (e.response) {
-        message = e.response.data.error;
-      } else if (e.request) {
-        message = e.request.toString();
-      } else {
-        message = e.message;
-      }
+        if (e.response) {
+          message = e.response.data.error;
+        } else if (e.request) {
+          message = e.request.toString();
+        } else {
+          message = e.message;
+        }
 
-      toast.error(message);
-    };
+        toast.error(message);
+      };
 
-    await api
-      .post(`/help-orders/${helpOrder.id}/answer/`, helpOrder)
-      .catch(_catch);
+      await api
+        .post(`/help-orders/${helpOrder.id}/answer/`, helpOrder)
+        .catch(_catch);
 
-    props.onAnswer(helpOrder);
+      props.onAnswer(helpOrder);
+    }
+
+    props.onClose();
   }
 
   return (
@@ -101,4 +112,5 @@ Answering.propTypes = {
     answer: PropTypes.string,
   }).isRequired,
   onAnswer: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 };

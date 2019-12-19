@@ -3,7 +3,6 @@ module.exports = {
     es6: true,
   },
   extends: [
-    'plugin:react/recommended',
     'airbnb',
     'prettier',
     'prettier/react'
@@ -23,6 +22,9 @@ module.exports = {
   },
   plugins: [
     'react',
+    'jsx-a11y',
+    'import',
+    'react-hooks',
     'prettier'
   ],
   rules: {

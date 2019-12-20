@@ -8,18 +8,21 @@ import { signInSuccess, signFailure } from './actions';
 
 export function* signIn({ payload }) {
   try {
-    const { email, password } = payload;
+    const { id } = payload;
 
-    const response = yield call(api.post, 'sessions', {
-      email,
-      password,
-    });
+    const response = yield call(api.get, `students/?id=${id}`);
 
-    const { token, user } = response.data;
+    const { students } = response.data;
 
-    api.defaults.headers.Authorization = `Bearer ${token}`;
-
-    yield put(signInSuccess(token, user));
+    if (students.length === 1) {
+      yield put(signInSuccess(students[0]));
+    } else {
+      Alert.alert(
+        'Falha na autenticação',
+        'Aluno não encontrado, verifique seus dados'
+      );
+      yield put(signFailure());
+    }
 
     // history.push('/students');
   } catch (error) {
@@ -31,22 +34,11 @@ export function* signIn({ payload }) {
   }
 }
 
-export function setToken({ payload }) {
-  if (!payload) return;
-
-  const { token } = payload.auth;
-
-  if (token) {
-    api.defaults.headers.Authorization = `Bearer ${token}`;
-  }
-}
-
 export function signOut() {
   // history.push('/');
 }
 
 export default all([
-  takeLatest('persist/REHYDRATE', setToken),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
   takeLatest('@auth/SIGN_OUT', signOut),
 ]);

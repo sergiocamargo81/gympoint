@@ -15,14 +15,28 @@ class StudentController {
         ? 10
         : parseInt(req.query.pageSize, 10);
 
+    const { id } = req.query;
+
     const nameFilter = req.query.nameFilter || '';
 
-    const result = await Student.findAndCountAll({
-      where: {
+    let where;
+
+    if (id > 0) {
+      where = {
+        id,
+      };
+    } else if (nameFilter) {
+      where = {
         name: {
           [Op.iLike]: `%${nameFilter}%`,
         },
-      },
+      };
+    } else {
+      where = {};
+    }
+
+    const result = await Student.findAndCountAll({
+      where,
       limit: pageSize,
       offset: (page - 1) * pageSize,
       attributes: [

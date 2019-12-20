@@ -10,19 +10,11 @@ export function* signIn({ payload }) {
   try {
     const { id } = payload;
 
-    const response = yield call(api.get, `students/?id=${id}`);
+    const response = yield call(api.get, `students/${id}`);
 
-    const { students } = response.data;
+    const student = response.data;
 
-    if (students.length === 1) {
-      yield put(signInSuccess(students[0]));
-    } else {
-      Alert.alert(
-        'Falha na autenticação',
-        'Aluno não encontrado, verifique seus dados'
-      );
-      yield put(signFailure());
-    }
+    yield put(signInSuccess(student));
 
     // history.push('/students');
   } catch (error) {

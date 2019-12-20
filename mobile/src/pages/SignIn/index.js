@@ -1,17 +1,26 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Image } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
+import { signInRequest } from '~/store/modules/auth/actions';
 
 import logo from '~/assets/logo.png';
 
 import { Container, Form, FormInput, SubmitButton } from './styles';
 
 export default function SignIn({ navigation }) {
-  const id = useRef();
+  const dispatch = useDispatch();
+  const idRef = useRef();
+
+  const [idStudent, setIdStudent] = useState('');
+
+  const loading = useSelector(state => state.auth.loading);
 
   function handleSubmit() {
-    navigation.navigate('Checkins');
+    dispatch(signInRequest(idStudent));
+
+    // navigation.navigate('Checkins');
   }
 
   return (
@@ -19,14 +28,19 @@ export default function SignIn({ navigation }) {
       <Image source={logo} />
       <Form>
         <FormInput
+          keyboardType="number-pad"
           autoCorrect={false}
           autoCapitalize="none"
           placeholder="Informe seu ID de cadastro"
-          ref={id}
+          ref={idRef}
           returnKeyType="send"
           onSubmitEditing={handleSubmit}
+          value={idStudent}
+          onChangeText={setIdStudent}
         />
-        <SubmitButton onPress={handleSubmit}>Entrar no sistema</SubmitButton>
+        <SubmitButton loading={loading} onPress={handleSubmit}>
+          Entrar no sistema
+        </SubmitButton>
       </Form>
     </Container>
   );

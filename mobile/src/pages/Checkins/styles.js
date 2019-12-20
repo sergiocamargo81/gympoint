@@ -5,20 +5,27 @@ import ButtonComponent from '~/components/Button';
 export const Container = styled.View`
   flex: 1;
   background: #f5f5f5;
+  border-bottom-color: #ddd;
+  border-bottom-width: 1px;
+
+  border-top-color: #ddd;
+  border-top-width: 1px;
 `;
 
 export const Button = styled(ButtonComponent)`
-  margin: 25px 20px 10px;
+  margin: 25px 20px;
 `;
 
-export const List = styled.FlatList``;
+export const List = styled.FlatList.attrs({
+  showsVerticalScrollIndicator: false,
+})``;
 
 export const Checkin = styled.View`
   justify-content: space-between;
   align-items: center;
   background: #fff;
   border: solid 1px #ddd;
-  margin: 15px 20px 0;
+  margin: 0 20px 15px;
   border-radius: 4px;
   height: 45px;
   flex-direction: row;

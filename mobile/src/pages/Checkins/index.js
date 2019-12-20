@@ -17,6 +17,13 @@ import {
 import Header from '~/components/Header';
 
 const data = [
+  { id: 14, name: 'Check-in #14', elapsed: 'Hoje às 14h' },
+  { id: 13, name: 'Check-in #13', elapsed: 'Ontem às 20h' },
+  { id: 12, name: 'Check-in #12', elapsed: 'Há 3 dias' },
+  { id: 11, name: 'Check-in #11', elapsed: 'Há 1 semana' },
+  { id: 10, name: 'Check-in #10', elapsed: 'Há 2 semanas' },
+  { id: 9, name: 'Check-in #9', elapsed: 'Há 1 mês' },
+  { id: 8, name: 'Check-in #8', elapsed: 'Há 3 meses' },
   { id: 7, name: 'Check-in #7', elapsed: 'Hoje às 14h' },
   { id: 6, name: 'Check-in #6', elapsed: 'Ontem às 20h' },
   { id: 5, name: 'Check-in #5', elapsed: 'Há 3 dias' },

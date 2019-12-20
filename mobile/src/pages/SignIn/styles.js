@@ -1,25 +1,28 @@
 import styled from 'styled-components/native';
 
+import Button from '~/components/Button';
+
 export const Container = styled.View`
-  height: 100%;
-  background: #fff;
+  flex: 1;
   justify-content: center;
   align-items: center;
+  background: #fff;
+  padding: 0 30px;
 `;
 
-export const Image = styled.Image`
-  margin-bottom: 30px;
+export const Form = styled.View`
+  align-self: stretch;
+  margin-top: 30px;
 `;
 
-export const TextInput = styled.TextInput.attrs({
-  placeholder: 'Informe seu ID de cadastro',
-})`
-  width: 325px;
+export const FormInput = styled.TextInput`
   height: 45px;
-
   border-radius: 4px;
   border: 1px solid #ddd;
   padding: 10px;
   font-size: 16px;
-  margin-bottom: 15px;
+`;
+
+export const SubmitButton = styled(Button)`
+  margin-top: 15px;
 `;

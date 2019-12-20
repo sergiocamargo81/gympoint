@@ -1,17 +1,39 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { Image } from 'react-native';
+
+import PropTypes from 'prop-types';
 
 import logo from '~/assets/logo.png';
 
-import { Container, Image, TextInput } from './styles';
+import { Container, Form, FormInput, SubmitButton } from './styles';
 
-import Button from '~/components/Button';
+export default function SignIn({ navigation }) {
+  const id = useRef();
 
-export default function SignIn() {
+  function handleSubmit() {
+    navigation.navigate('Checkins');
+  }
+
   return (
     <Container>
       <Image source={logo} />
-      <TextInput />
-      <Button>Entrar no sistema</Button>
+      <Form>
+        <FormInput
+          autoCorrect={false}
+          autoCapitalize="none"
+          placeholder="Informe seu ID de cadastro"
+          ref={id}
+          returnKeyType="send"
+          onSubmitEditing={handleSubmit}
+        />
+        <SubmitButton onPress={handleSubmit}>Entrar no sistema</SubmitButton>
+      </Form>
     </Container>
   );
 }
+
+SignIn.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }).isRequired,
+};

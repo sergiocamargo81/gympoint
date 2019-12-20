@@ -15,17 +15,11 @@ class StudentController {
         ? 10
         : parseInt(req.query.pageSize, 10);
 
-    const { id } = req.query;
-
     const nameFilter = req.query.nameFilter || '';
 
     let where;
 
-    if (id > 0) {
-      where = {
-        id,
-      };
-    } else if (nameFilter) {
+    if (nameFilter) {
       where = {
         name: {
           [Op.iLike]: `%${nameFilter}%`,

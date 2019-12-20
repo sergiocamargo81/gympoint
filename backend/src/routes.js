@@ -7,6 +7,7 @@ import MembershipController from './app/controllers/MembershipController';
 import CheckinController from './app/controllers/CheckinController';
 import GymHelpOrderController from './app/controllers/GymHelpOrderController';
 import StudentHelpOrderController from './app/controllers/StudentHelpOrderController';
+import StudentSessionController from './app/controllers/StudentSessionController';
 
 import authMiddleware from './app/middlewares/auth';
 import studentMiddleware from './app/middlewares/student';
@@ -14,6 +15,8 @@ import studentMiddleware from './app/middlewares/student';
 const routes = new Router();
 
 routes.post('/sessions', SessionController.store);
+
+routes.get('/students/:id', studentMiddleware, StudentSessionController.index);
 
 routes.post(
   '/students/:id/checkins',

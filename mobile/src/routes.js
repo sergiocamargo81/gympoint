@@ -1,12 +1,19 @@
+import React from 'react';
+
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+
+import { createStackNavigator } from 'react-navigation-stack';
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import SignIn from './pages/SignIn';
 
 import Checkins from './pages/Checkins';
 import HelpOrders from './pages/HelpOrders';
 
-import HelpOrder from './pages/HelpOrder';
+import HelpOrderCreate from './pages/HelpOrderCreate';
 import HelpOrderAnswered from './pages/HelpOrderAnswered';
 
 export default (isSigned = false) =>
@@ -19,7 +26,29 @@ export default (isSigned = false) =>
         App: createBottomTabNavigator(
           {
             Checkins,
-            HelpOrders,
+            HelpOrders: {
+              screen: createStackNavigator(
+                {
+                  HelpOrders,
+                  HelpOrderCreate,
+                  HelpOrderAnswered,
+                },
+                {
+                  defaultNavigationOptions: {
+                    headerTintColor: '#FFF',
+                    headerLeftContainerStyle: {
+                      marginLeft: 20,
+                    },
+                  },
+                }
+              ),
+              navigationOptions: {
+                tabBarLabel: 'Pedir ajuda',
+                tabBarIcon: ({ tintColor }) => (
+                  <Icon name="live-help" size={20} color={tintColor} />
+                ),
+              },
+            },
           },
           {
             tabBarOptions: {

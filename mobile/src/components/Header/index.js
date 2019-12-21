@@ -1,14 +1,22 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
-import { Container } from './styles';
+import { Container, Left, Center, Right, Logo, Back } from './styles';
 
-import logo from '~/assets/logo-small.png';
-
-export default function Header() {
+export default function Header({ onBack }) {
   return (
     <Container>
-      <Image source={logo} />
+      <Left>
+        {onBack && (
+          <TouchableOpacity onPress={onBack}>
+            <Back />
+          </TouchableOpacity>
+        )}
+      </Left>
+      <Center>
+        <Logo />
+      </Center>
+      <Right />
     </Container>
   );
 }

@@ -47,12 +47,10 @@ function Item({ item }) {
   );
 }
 
-export default function HelpOrders() {
+export default function HelpOrders({ navigation }) {
   const id = useSelector(state => state.auth.id);
 
   const [helpOrders, setHelpOrders] = useState([]);
-
-  const [loading, setLoading] = useState(false);
 
   const [newHelpOrder, setNewHelpOrder] = useState({});
 
@@ -77,37 +75,12 @@ export default function HelpOrders() {
   }, [id, newHelpOrder]);
 
   async function handleNewHelpOrder() {
-    /*
-    setLoading(true);
-
-    try {
-      const response = await api.post(`/students/${id}/checkins`);
-
-      setNewHelpOrder(response.data);
-    } catch (e) {
-      let message;
-
-      if (e.response) {
-        message = e.response.data.error;
-      } else if (e.request) {
-        message = e.request.toString();
-      } else {
-        message = e.message;
-      }
-
-      Alert.alert('Falha ao realizar check-in', message);
-    }
-
-    setLoading(false);
-    */
+    navigation.navigate('HelpOrderCreate');
   }
 
   return (
     <Container>
-      <Header />
-      <Button loading={loading} onPress={handleNewHelpOrder}>
-        Novo pedido de auxílio
-      </Button>
+      <Button onPress={handleNewHelpOrder}>Novo pedido de auxílio</Button>
       <List
         data={helpOrders}
         keyExtractor={item => String(item.id)}
@@ -118,6 +91,7 @@ export default function HelpOrders() {
 }
 
 HelpOrders.navigationOptions = {
+  header: <Header />,
   tabBarLabel: 'Pedir ajuda',
   tabBarIcon: ({ tintColor }) => (
     <Icon name="live-help" size={20} color={tintColor} />

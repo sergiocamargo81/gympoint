@@ -27,21 +27,11 @@ export default (isSigned = false) =>
           {
             Checkins,
             HelpOrders: {
-              screen: createStackNavigator(
-                {
-                  HelpOrders,
-                  HelpOrderCreate,
-                  HelpOrderAnswered,
-                },
-                {
-                  defaultNavigationOptions: {
-                    headerTintColor: '#FFF',
-                    headerLeftContainerStyle: {
-                      marginLeft: 20,
-                    },
-                  },
-                }
-              ),
+              screen: createStackNavigator({
+                HelpOrders,
+                HelpOrderCreate,
+                HelpOrderAnswered,
+              }),
               navigationOptions: {
                 tabBarLabel: 'Pedir ajuda',
                 tabBarIcon: ({ tintColor }) => (

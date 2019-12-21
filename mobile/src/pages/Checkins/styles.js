@@ -5,8 +5,6 @@ import ButtonComponent from '~/components/Button';
 export const Container = styled.View`
   flex: 1;
   background: #f5f5f5;
-  border-bottom-color: #ddd;
-  border-bottom-width: 1px;
 `;
 
 export const Button = styled(ButtonComponent)`

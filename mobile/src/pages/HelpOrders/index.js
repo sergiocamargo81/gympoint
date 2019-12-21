@@ -47,6 +47,16 @@ function Item({ item }) {
   );
 }
 
+function formatHelpOrder(helpOrder) {
+  helpOrder.answered = helpOrder.answer !== null;
+  helpOrder.elapsed = formatDistanceToNow(parseISO(helpOrder.createdAt), {
+    addSuffix: true,
+    locale: pt,
+  });
+
+  return helpOrder;
+}
+
 export default function HelpOrders({ navigation }) {
   const id = useSelector(state => state.auth.id);
 
@@ -58,24 +68,25 @@ export default function HelpOrders({ navigation }) {
     async function loadHelpOrders() {
       const response = await api.get(`students/${id}/help-orders`);
 
-      const helpOrdersFormatted = response.data.map(h => {
-        h.answered = h.answer !== null;
-        h.elapsed = formatDistanceToNow(parseISO(h.createdAt), {
-          addSuffix: true,
-          locale: pt,
-        });
-
-        return h;
-      });
+      const helpOrdersFormatted = response.data.map(h => formatHelpOrder(h));
 
       setHelpOrders(helpOrdersFormatted);
     }
 
     loadHelpOrders();
-  }, [id, newHelpOrder]);
+  }, [id]);
+
+  useEffect(() => {
+    // const helpOrdersFormatted = [newHelpOrder, ...helpOrders].map(h =>
+    //   formatHelpOrder(h)
+    // );
+    // setHelpOrders(helpOrdersFormatted);
+  }, [helpOrders, newHelpOrder]);
 
   async function handleNewHelpOrder() {
-    navigation.navigate('HelpOrderCreate');
+    navigation.navigate('HelpOrderCreate', {
+      onCreated: helpOrder => setNewHelpOrder(helpOrder),
+    });
   }
 
   return (

@@ -14,6 +14,7 @@ class StudentHelpOrderController {
           attributes: ['id', 'name', 'email', 'age', 'weight', 'height'],
         },
       ],
+      order: [['created_at', 'desc']],
     });
 
     return res.json(helpOrders);
@@ -33,20 +34,17 @@ class StudentHelpOrderController {
       question: req.body.question,
     });
 
-    return res.json({
-      id: helpOrder.id,
-      question: helpOrder.question,
-      created_at: HelpOrder.created_at,
-      updated_at: helpOrder.updated_at,
-      Student: {
-        id: req.student.id,
-        name: req.student.name,
-        email: req.student.email,
-        age: req.student.age,
-        weight: req.student.weight,
-        height: req.student.height,
-      },
+    const helpOrderUpdated = await HelpOrder.findByPk(helpOrder.id, {
+      include: [
+        {
+          model: Student,
+          as: 'student',
+          attributes: ['id', 'name', 'email', 'age', 'weight', 'height'],
+        },
+      ],
     });
+
+    return res.json(helpOrderUpdated);
   }
 }
 

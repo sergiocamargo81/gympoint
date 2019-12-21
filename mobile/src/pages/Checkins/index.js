@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import { useSelector } from 'react-redux';
+
 import PropTypes from 'prop-types';
+
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import pt from 'date-fns/locale/pt-BR';
+import api from '~/services/api';
 
 import {
   Container,
@@ -16,39 +22,48 @@ import {
 
 import Header from '~/components/Header';
 
-const data = [
-  { id: 14, name: 'Check-in #14', elapsed: 'Hoje às 14h' },
-  { id: 13, name: 'Check-in #13', elapsed: 'Ontem às 20h' },
-  { id: 12, name: 'Check-in #12', elapsed: 'Há 3 dias' },
-  { id: 11, name: 'Check-in #11', elapsed: 'Há 1 semana' },
-  { id: 10, name: 'Check-in #10', elapsed: 'Há 2 semanas' },
-  { id: 9, name: 'Check-in #9', elapsed: 'Há 1 mês' },
-  { id: 8, name: 'Check-in #8', elapsed: 'Há 3 meses' },
-  { id: 7, name: 'Check-in #7', elapsed: 'Hoje às 14h' },
-  { id: 6, name: 'Check-in #6', elapsed: 'Ontem às 20h' },
-  { id: 5, name: 'Check-in #5', elapsed: 'Há 3 dias' },
-  { id: 4, name: 'Check-in #4', elapsed: 'Há 1 semana' },
-  { id: 3, name: 'Check-in #3', elapsed: 'Há 2 semanas' },
-  { id: 2, name: 'Check-in #2', elapsed: 'Há 1 mês' },
-  { id: 1, name: 'Check-in #1', elapsed: 'Há 3 meses' },
-];
-
 function Item({ item }) {
   return (
     <Checkin>
-      <CheckinName>{item.name}</CheckinName>
+      <CheckinName>Check-in #{item.number}</CheckinName>
       <CheckinElapsed>{item.elapsed}</CheckinElapsed>
     </Checkin>
   );
 }
 
 export default function Checkins() {
+  const id = useSelector(state => state.auth.id);
+
+  const [checkins, setCheckins] = useState([]);
+
+  useEffect(() => {
+    async function loadCheckins() {
+      const response = await api.get(`students/${id}/checkins`);
+
+      let numberCheckin = response.data.length;
+
+      const checkinsFormatted = response.data.map(c => {
+        c.number = numberCheckin;
+        c.elapsed = formatDistanceToNow(parseISO(c.createdAt), {
+          addSuffix: true,
+          locale: pt,
+        });
+        numberCheckin -= 1;
+        return c;
+      });
+
+      setCheckins(checkinsFormatted);
+    }
+
+    loadCheckins();
+  }, [id]);
+
   return (
     <Container>
       <Header />
       <Button>Novo check-in</Button>
       <List
-        data={data}
+        data={checkins}
         keyExtractor={item => String(item.id)}
         renderItem={({ item }) => <Item item={item} />}
       />

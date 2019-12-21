@@ -7,9 +7,6 @@ export const Container = styled.View`
   background: #f5f5f5;
   border-bottom-color: #ddd;
   border-bottom-width: 1px;
-
-  border-top-color: #ddd;
-  border-top-width: 1px;
 `;
 
 export const Button = styled(ButtonComponent)`
@@ -35,8 +32,10 @@ export const Checkin = styled.View`
 export const CheckinName = styled.Text`
   font-weight: bold;
   font-size: 14px;
+  color: #444;
 `;
 
 export const CheckinElapsed = styled.Text`
   font-size: 14px;
+  color: #666;
 `;

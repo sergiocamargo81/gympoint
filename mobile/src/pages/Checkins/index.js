@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+
+import { Alert } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -36,6 +37,10 @@ export default function Checkins() {
 
   const [checkins, setCheckins] = useState([]);
 
+  const [loading, setLoading] = useState(false);
+
+  const [newCheckin, setNewCheckin] = useState({});
+
   useEffect(() => {
     async function loadCheckins() {
       const response = await api.get(`students/${id}/checkins`);
@@ -56,12 +61,38 @@ export default function Checkins() {
     }
 
     loadCheckins();
-  }, [id]);
+  }, [id, newCheckin]);
+
+  async function handleNewCheckin() {
+    setLoading(true);
+
+    try {
+      const response = await api.post(`/students/${id}/checkins`);
+
+      setNewCheckin(response.data);
+    } catch (e) {
+      let message;
+
+      if (e.response) {
+        message = e.response.data.error;
+      } else if (e.request) {
+        message = e.request.toString();
+      } else {
+        message = e.message;
+      }
+
+      Alert.alert('Falha ao realizar check-in', message);
+    }
+
+    setLoading(false);
+  }
 
   return (
     <Container>
       <Header />
-      <Button>Novo check-in</Button>
+      <Button loading={loading} onPress={handleNewCheckin}>
+        Novo check-in
+      </Button>
       <List
         data={checkins}
         keyExtractor={item => String(item.id)}

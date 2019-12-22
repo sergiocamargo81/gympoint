@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Alert } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -26,27 +26,6 @@ import {
 
 import Header from '~/components/Header';
 
-function ItemStatus({ item }) {
-  return (
-    <HelpOrderStatus answered={item.answered}>
-      {item.answered ? 'Respondido' : 'Sem resposta'}
-    </HelpOrderStatus>
-  );
-}
-
-function Item({ item }) {
-  return (
-    <HelpOrder>
-      <HelpOrderHeader>
-        <HelpOrderCheck answered={item.answered} />
-        <ItemStatus item={item} />
-        <HelpOrderElapsed>{item.elapsed}</HelpOrderElapsed>
-      </HelpOrderHeader>
-      <HelpOrderBody numberOfLines={3}>{item.question}</HelpOrderBody>
-    </HelpOrder>
-  );
-}
-
 function formatHelpOrder(helpOrder) {
   helpOrder.answered = helpOrder.answer !== null;
   helpOrder.elapsed = formatDistanceToNow(parseISO(helpOrder.createdAt), {
@@ -62,30 +41,56 @@ export default function HelpOrders({ navigation }) {
 
   const [helpOrders, setHelpOrders] = useState([]);
 
-  const [newHelpOrder, setNewHelpOrder] = useState({});
-
   useEffect(() => {
     async function loadHelpOrders() {
       const response = await api.get(`students/${id}/help-orders`);
 
-      const helpOrdersFormatted = response.data.map(h => formatHelpOrder(h));
+      const formattedHelpOrders = response.data.map(h => formatHelpOrder(h));
 
-      setHelpOrders(helpOrdersFormatted);
+      setHelpOrders(formattedHelpOrders);
     }
 
     loadHelpOrders();
   }, [id]);
 
-  useEffect(() => {
-    // const helpOrdersFormatted = [newHelpOrder, ...helpOrders].map(h =>
-    //   formatHelpOrder(h)
-    // );
-    // setHelpOrders(helpOrdersFormatted);
-  }, [helpOrders, newHelpOrder]);
+  function ItemStatus({ item }) {
+    return (
+      <HelpOrderStatus answered={item.answered}>
+        {item.answered ? 'Respondido' : 'Sem resposta'}
+      </HelpOrderStatus>
+    );
+  }
+
+  function itemPress(item) {
+    navigation.navigate('HelpOrderAnswered', {
+      helpOrder: item,
+    });
+  }
+
+  function Item({ item }) {
+    return (
+      <TouchableOpacity onPress={() => itemPress(item)}>
+        <HelpOrder>
+          <HelpOrderHeader>
+            <HelpOrderCheck answered={item.answered} />
+            <ItemStatus item={item} />
+            <HelpOrderElapsed>{item.elapsed}</HelpOrderElapsed>
+          </HelpOrderHeader>
+          <HelpOrderBody>{item.question}</HelpOrderBody>
+        </HelpOrder>
+      </TouchableOpacity>
+    );
+  }
 
   async function handleNewHelpOrder() {
     navigation.navigate('HelpOrderCreate', {
-      onCreated: helpOrder => setNewHelpOrder(helpOrder),
+      onCreated: helpOrder => {
+        const formattedHelpOrders = [helpOrder, ...helpOrders].map(h =>
+          formatHelpOrder(h)
+        );
+
+        setHelpOrders(formattedHelpOrders);
+      },
     });
   }
 

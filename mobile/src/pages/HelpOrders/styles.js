@@ -23,8 +23,8 @@ export const HelpOrder = styled.View`
   border: solid 1px #ddd;
   margin: 0 20px 15px;
   border-radius: 4px;
-  height: 150px;
   padding: 20px;
+  max-height: 150px;
 `;
 
 export const HelpOrderHeader = styled.View`
@@ -54,7 +54,9 @@ export const HelpOrderElapsed = styled.Text`
   text-align: right;
 `;
 
-export const HelpOrderBody = styled.Text`
+export const HelpOrderBody = styled.Text.attrs(() => ({
+  numberOfLines: 3,
+}))`
   margin-top: 20px;
   text-align: left;
   font-size: 14px;

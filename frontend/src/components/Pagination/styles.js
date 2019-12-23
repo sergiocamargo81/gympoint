@@ -61,7 +61,7 @@ export const ActivePage = styled.span`
   border-radius: 4px;
 `;
 
-export const PageLink = styled.button.attrs(props => ({
+export const PageLink = styled.button.attrs(() => ({
   type: 'button',
 }))`
   background: #fff;
@@ -81,7 +81,7 @@ export const PageLink = styled.button.attrs(props => ({
   }
 `;
 
-export const PageMove = styled.button.attrs(props => ({
+export const PageMove = styled.button.attrs(() => ({
   type: 'button',
 }))`
   background: #fff;

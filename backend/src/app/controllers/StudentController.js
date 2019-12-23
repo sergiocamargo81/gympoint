@@ -70,7 +70,6 @@ class StudentController {
         .required(),
       weight: Yup.number()
         .positive()
-        .integer()
         .required(),
       height: Yup.number()
         .positive()
@@ -115,9 +114,7 @@ class StudentController {
       age: Yup.number()
         .positive()
         .integer(),
-      weight: Yup.number()
-        .positive()
-        .integer(),
+      weight: Yup.number().positive(),
       height: Yup.number().positive(),
     });
 

@@ -1,11 +1,14 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
+
 import {
   MdChevronLeft,
   MdChevronRight,
   MdFirstPage,
   MdLastPage,
 } from 'react-icons/md';
+
 import { Container, ActivePage, PageLink, PageMove } from './styles';
 
 function AddLeft(pages) {
@@ -117,3 +120,8 @@ export default function Pagination({ page, onChange }) {
     </Container>
   );
 }
+
+Pagination.propTypes = {
+  page: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
+};

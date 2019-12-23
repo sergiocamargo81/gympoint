@@ -17,8 +17,8 @@ import { Container, Panel, PlanData } from './styles';
 export default function Plan({ history }) {
   const [id, setId] = useState(0);
   const [title, setTitle] = useState('');
-  const [duration, setDuration] = useState('');
-  const [price, setPrice] = useState('');
+  const [duration, setDuration] = useState(0);
+  const [price, setPrice] = useState(0);
 
   const [errorTitle, setErrorTitle] = useState('');
   const [errorDuration, setErrorDuration] = useState('');
@@ -131,18 +131,36 @@ export default function Plan({ history }) {
       <PlanData>
         <label>
           TÍTULO DO PLANO
-          <input value={title} type="text" onChange={onChangeTitle} />
+          <input
+            value={title}
+            type="text"
+            onChange={onChangeTitle}
+            min="1"
+            max="255"
+          />
           {errorTitle && <span className="error">{errorTitle}</span>}
         </label>
         <div>
           <label>
             DURAÇÃO (em meses)
-            <input value={duration} type="text" onChange={onChangeDuration} />
+            <input
+              value={duration}
+              type="number"
+              onChange={onChangeDuration}
+              min="1"
+              max="9999"
+            />
             {errorDuration && <span className="error">{errorDuration}</span>}
           </label>
           <label>
             PREÇO MENSAL
-            <input value={price} type="text" onChange={onChangePrice} />
+            <input
+              value={price}
+              type="number"
+              onChange={onChangePrice}
+              min="0.01"
+              max="9999.99"
+            />
             {errorPrice && <span className="error">{errorPrice}</span>}
           </label>
           <label>

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
+
 import Header from '~/components/Header';
 
 import {
@@ -34,3 +36,9 @@ export default function HelpOrderAnswered({ navigation }) {
 HelpOrderAnswered.navigationOptions = ({ navigation }) => ({
   header: <Header onBack={() => navigation.navigate('HelpOrders')} />,
 });
+
+HelpOrderAnswered.propTypes = {
+  navigation: PropTypes.shape({
+    getParam: PropTypes.func.isRequired,
+  }).isRequired,
+};

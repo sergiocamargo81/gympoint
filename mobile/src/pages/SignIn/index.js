@@ -2,14 +2,13 @@ import React, { useRef, useState } from 'react';
 import { Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
 import { signInRequest } from '~/store/modules/auth/actions';
 
 import logo from '~/assets/logo.png';
 
 import { Container, Form, FormInput, SubmitButton } from './styles';
 
-export default function SignIn({ navigation }) {
+export default function SignIn() {
   const dispatch = useDispatch();
   const idRef = useRef();
 
@@ -19,8 +18,6 @@ export default function SignIn({ navigation }) {
 
   function handleSubmit() {
     dispatch(signInRequest(idStudent));
-
-    // navigation.navigate('Checkins');
   }
 
   return (
@@ -45,9 +42,3 @@ export default function SignIn({ navigation }) {
     </Container>
   );
 }
-
-SignIn.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-  }).isRequired,
-};

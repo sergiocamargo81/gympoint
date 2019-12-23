@@ -79,3 +79,10 @@ export default function HelpOrderCreate({ navigation }) {
 HelpOrderCreate.navigationOptions = ({ navigation }) => ({
   header: <Header onBack={() => navigation.navigate('HelpOrders')} />,
 });
+
+HelpOrderCreate.propTypes = {
+  navigation: PropTypes.shape({
+    getParam: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

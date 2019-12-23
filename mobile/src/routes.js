@@ -6,6 +6,8 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import { createStackNavigator } from 'react-navigation-stack';
 
+import PropTypes from 'prop-types';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import SignIn from './pages/SignIn';
@@ -15,6 +17,14 @@ import HelpOrders from './pages/HelpOrders';
 
 import HelpOrderCreate from './pages/HelpOrderCreate';
 import HelpOrderAnswered from './pages/HelpOrderAnswered';
+
+function TabHelpOrderIcon({ tintColor }) {
+  return <Icon name="live-help" size={20} color={tintColor} />;
+}
+
+TabHelpOrderIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
 
 export default (isSigned = false) =>
   createAppContainer(
@@ -34,9 +44,7 @@ export default (isSigned = false) =>
               }),
               navigationOptions: {
                 tabBarLabel: 'Pedir ajuda',
-                tabBarIcon: ({ tintColor }) => (
-                  <Icon name="live-help" size={20} color={tintColor} />
-                ),
+                tabBarIcon: TabHelpOrderIcon,
               },
             },
           },

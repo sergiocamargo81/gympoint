@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Alert, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -36,6 +36,39 @@ function formatHelpOrder(helpOrder) {
   return helpOrder;
 }
 
+function Item({ item, navigation }) {
+  const handlePress = () =>
+    navigation.navigate('HelpOrderAnswered', {
+      helpOrder: item,
+    });
+
+  return (
+    <TouchableOpacity onPress={handlePress}>
+      <HelpOrder>
+        <HelpOrderHeader>
+          <HelpOrderCheck answered={item.answered} />
+          <HelpOrderStatus answered={item.answered}>
+            {item.answered ? 'Respondido' : 'Sem resposta'}
+          </HelpOrderStatus>
+          <HelpOrderElapsed>{item.elapsed}</HelpOrderElapsed>
+        </HelpOrderHeader>
+        <HelpOrderBody>{item.question}</HelpOrderBody>
+      </HelpOrder>
+    </TouchableOpacity>
+  );
+}
+
+Item.propTypes = {
+  item: PropTypes.shape({
+    answered: PropTypes.bool.isRequired,
+    elapsed: PropTypes.string.isRequired,
+    question: PropTypes.string.isRequired,
+  }).isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
 export default function HelpOrders({ navigation }) {
   const id = useSelector(state => state.auth.id);
 
@@ -52,35 +85,6 @@ export default function HelpOrders({ navigation }) {
 
     loadHelpOrders();
   }, [id]);
-
-  function ItemStatus({ item }) {
-    return (
-      <HelpOrderStatus answered={item.answered}>
-        {item.answered ? 'Respondido' : 'Sem resposta'}
-      </HelpOrderStatus>
-    );
-  }
-
-  function itemPress(item) {
-    navigation.navigate('HelpOrderAnswered', {
-      helpOrder: item,
-    });
-  }
-
-  function Item({ item }) {
-    return (
-      <TouchableOpacity onPress={() => itemPress(item)}>
-        <HelpOrder>
-          <HelpOrderHeader>
-            <HelpOrderCheck answered={item.answered} />
-            <ItemStatus item={item} />
-            <HelpOrderElapsed>{item.elapsed}</HelpOrderElapsed>
-          </HelpOrderHeader>
-          <HelpOrderBody>{item.question}</HelpOrderBody>
-        </HelpOrder>
-      </TouchableOpacity>
-    );
-  }
 
   async function handleNewHelpOrder() {
     navigation.navigate('HelpOrderCreate', {
@@ -100,16 +104,28 @@ export default function HelpOrders({ navigation }) {
       <List
         data={helpOrders}
         keyExtractor={item => String(item.id)}
-        renderItem={({ item }) => <Item item={item} />}
+        renderItem={({ item }) => <Item item={item} navigation={navigation} />}
       />
     </Container>
   );
 }
 
+HelpOrders.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+function TabHelpOrdersIcon({ tintColor }) {
+  return <Icon name="live-help" size={20} color={tintColor} />;
+}
+
+TabHelpOrdersIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
+
 HelpOrders.navigationOptions = {
   header: <Header />,
   tabBarLabel: 'Pedir ajuda',
-  tabBarIcon: ({ tintColor }) => (
-    <Icon name="live-help" size={20} color={tintColor} />
-  ),
+  tabBarIcon: TabHelpOrdersIcon,
 };

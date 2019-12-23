@@ -32,6 +32,13 @@ function Item({ item }) {
   );
 }
 
+Item.propTypes = {
+  item: PropTypes.shape({
+    number: PropTypes.number.isRequired,
+    elapsed: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
 export default function Checkins() {
   const id = useSelector(state => state.auth.id);
 
@@ -102,9 +109,21 @@ export default function Checkins() {
   );
 }
 
+function TabCheckinsIcon({ tintColor }) {
+  return <Icon name="edit-location" size={20} color={tintColor} />;
+}
+
+TabCheckinsIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
+
 Checkins.navigationOptions = {
   tabBarLabel: 'Check-ins',
-  tabBarIcon: ({ tintColor }) => (
-    <Icon name="edit-location" size={20} color={tintColor} />
-  ),
+  tabBarIcon: TabCheckinsIcon,
+};
+
+Checkins.propTypes = {
+  navigation: PropTypes.shape({
+    getParam: PropTypes.func.isRequired,
+  }).isRequired,
 };

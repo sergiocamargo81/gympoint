@@ -10,7 +10,7 @@ class HelpOrderAnswerMail {
   async handle({ data }) {
     const { helpOrder, student } = data;
 
-    console.log('A fila executou...');
+    // console.log('A fila executou...');
 
     await Mail.sendMail({
       to: `${student.name} <${student.email}>`,

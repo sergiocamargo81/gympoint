@@ -2,16 +2,25 @@ import styled from 'styled-components';
 import { darken } from 'polished';
 
 export const Container = styled.div`
-  > p {
+  display: flex;
+  flex-direction: column;
+
+  > span {
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 8px;
   }
 
-  > p:nth-child(2) {
+  > span:nth-child(2) {
     font-size: 16px;
     font-weight: normal;
     margin-bottom: 20px;
+    line-height: 26px;
+    text-align: left;
+    display: block;
+    white-space: pre-line;
+    max-height: 104px;
+    overflow: auto;
   }
 
   > textarea {
@@ -24,6 +33,9 @@ export const Container = styled.div`
     font-family: Roboto;
     color: #666;
     resize: none;
+    font-size: 16px;
+    line-height: 26px;
+    text-align: left;
 
     &::placeholder {
       color: #999;
@@ -40,6 +52,7 @@ export const Container = styled.div`
     font-weight: bold;
     font-size: 14px;
     transition: background 0.2s;
+    height: 45px;
 
     &:hover {
       background: ${darken(0.1, '#ee4d64')};

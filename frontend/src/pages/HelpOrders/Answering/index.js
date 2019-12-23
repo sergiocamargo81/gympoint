@@ -84,14 +84,16 @@ export default function Answering(props) {
         onRequestClose={closeModal}
       >
         <Container>
-          <p>PERGUNTA DO ALUNO</p>
-          <p>{helpOrder.question}</p>
-          <p>SUA RESPOSTA</p>
+          <span>PERGUNTA DO ALUNO</span>
+          <span>{helpOrder.question}</span>
+          <span>SUA RESPOSTA</span>
           <textarea
             placeholder="exemplo@email.com"
             type="text"
             value={helpOrder.answer}
             onChange={e => handleAnswerChange(e.target.value)}
+            minLength="2"
+            maxLength="10000"
           />
           <button type="button" onClick={() => handleAnswer()}>
             Responder aluno

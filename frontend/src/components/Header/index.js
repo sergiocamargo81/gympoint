@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import logo from '~/assets/logo-small.png';
 
 import { Container, Content, MenuLink, Profile } from './styles';
@@ -8,6 +9,8 @@ import { Container, Content, MenuLink, Profile } from './styles';
 import { signOut } from '~/store/modules/auth/actions';
 
 export default function Header() {
+  const userName = useSelector(state => state.user.profile.name);
+
   const ActiveStyle = {
     color: '#444',
   };
@@ -39,7 +42,7 @@ export default function Header() {
         <aside>
           <Profile>
             <div>
-              <strong>Administrador</strong>
+              <strong>{userName}</strong>
               <button type="button" onClick={handleSignOut}>
                 sair do Sistema
               </button>

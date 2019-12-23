@@ -39,9 +39,20 @@ export default function Student({ history }) {
   async function handleSubmit({ name, email, age, weight, height }) {
     const id = Number(student.id);
 
-    const _then = () => history.push('students');
+    try {
+      await (id
+        ? api.put('students/', {
+            id,
+            name,
+            email,
+            age,
+            weight,
+            height,
+          })
+        : api.post('students/', { name, email, age, weight, height }));
 
-    const _catch = e => {
+      history.push('students');
+    } catch (e) {
       let message;
 
       if (e.response) {
@@ -53,21 +64,7 @@ export default function Student({ history }) {
       }
 
       toast.error(message);
-    };
-
-    await (id
-      ? api.put('students/', {
-          id,
-          name,
-          email,
-          age,
-          weight,
-          height,
-        })
-      : api.post('students/', { name, email, age, weight, height })
-    )
-      .then(_then)
-      .catch(_catch);
+    }
   }
 
   const title = student.id ? 'Edição de aluno' : 'Cadastro de aluno';
@@ -91,24 +88,42 @@ export default function Student({ history }) {
         <StudentData>
           <label>
             NOME COMPLETO
-            <Input name="name" type="text" placeholder="John Doe" />
+            <Input
+              name="name"
+              type="text"
+              placeholder="John Doe"
+              min="2"
+              max="255"
+            />
           </label>
           <label>
             ENDEREÇO DE E-MAIL
-            <Input name="email" type="text" placeholder="exemplo@email.com" />
+            <Input name="email" type="email" placeholder="exemplo@email.com" />
           </label>
           <div>
             <label>
               IDADE
-              <Input name="age" type="text" />
+              <Input name="age" type="number" min="1" max="150" />
             </label>
             <label>
               PESO (em kg)
-              <Input name="weight" type="text" />
+              <Input
+                name="weight"
+                type="number"
+                min="0.01"
+                max="999.99"
+                step="0.01"
+              />
             </label>
             <label>
               Altura
-              <Input name="height" type="text" />
+              <Input
+                name="height"
+                type="number"
+                min="0.01"
+                max="3.00"
+                step="0.01"
+              />
             </label>
           </div>
         </StudentData>

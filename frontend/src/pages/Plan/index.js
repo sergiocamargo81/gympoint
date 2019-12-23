@@ -52,9 +52,11 @@ export default function Plan({ history }) {
     });
 
     if (schema.isValidSync(plan)) {
-      const _then = () => history.push('plans');
+      try {
+        await (id ? api.put('plans/', plan) : api.post('plans/', plan));
 
-      const _catch = e => {
+        history.push('plans');
+      } catch (e) {
         let message;
 
         if (e.response) {
@@ -66,11 +68,7 @@ export default function Plan({ history }) {
         }
 
         toast.error(message);
-      };
-
-      await (id ? api.put('plans/', plan) : api.post('plans/', plan))
-        .then(_then)
-        .catch(_catch);
+      }
     }
   }
 

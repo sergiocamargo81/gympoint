@@ -122,6 +122,8 @@ export default function Pagination({ page, onChange }) {
 }
 
 Pagination.propTypes = {
-  page: PropTypes.number.isRequired,
+  page: PropTypes.shape({
+    total: PropTypes.number.isRequired,
+  }).isRequired,
   onChange: PropTypes.func.isRequired,
 };

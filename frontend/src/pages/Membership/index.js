@@ -154,9 +154,13 @@ export default function Membership({ history }) {
     };
 
     if (isValid(membershipChanged)) {
-      const _then = () => history.push('memberships');
+      try {
+        await (membershipChanged.id
+          ? api.put('memberships/', membershipChanged)
+          : api.post('memberships/', membershipChanged));
 
-      const _catch = e => {
+        history.push('memberships');
+      } catch (e) {
         let message;
 
         if (e.response) {
@@ -168,14 +172,7 @@ export default function Membership({ history }) {
         }
 
         toast.error(message);
-      };
-
-      await (membershipChanged.id
-        ? api.put('memberships/', membershipChanged)
-        : api.post('memberships/', membershipChanged)
-      )
-        .then(_then)
-        .catch(_catch);
+      }
     }
   }
 

@@ -39,7 +39,11 @@ export default function Answering(props) {
 
   async function handleAnswer() {
     if (schema.isValidSync(helpOrder.answer)) {
-      const _catch = e => {
+      try {
+        await api.post(`/help-orders/${helpOrder.id}/answer/`, helpOrder);
+
+        props.onAnswer(helpOrder);
+      } catch (e) {
         let message;
 
         if (e.response) {
@@ -51,13 +55,7 @@ export default function Answering(props) {
         }
 
         toast.error(message);
-      };
-
-      await api
-        .post(`/help-orders/${helpOrder.id}/answer/`, helpOrder)
-        .catch(_catch);
-
-      props.onAnswer(helpOrder);
+      }
     }
 
     props.onClose();

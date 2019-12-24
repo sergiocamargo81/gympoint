@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import { Alert } from 'react-native';
 
+import { withNavigationFocus } from 'react-navigation';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { useSelector } from 'react-redux';
@@ -39,7 +41,7 @@ Item.propTypes = {
   }).isRequired,
 };
 
-export default function Checkins() {
+function Checkins({ isFocused }) {
   const id = useSelector(state => state.auth.id);
 
   const [checkins, setCheckins] = useState([]);
@@ -68,7 +70,7 @@ export default function Checkins() {
     }
 
     loadCheckins();
-  }, [id, newCheckin]);
+  }, [id, isFocused, newCheckin]);
 
   async function handleNewCheckin() {
     setLoading(true);
@@ -126,4 +128,7 @@ Checkins.propTypes = {
   navigation: PropTypes.shape({
     getParam: PropTypes.func.isRequired,
   }).isRequired,
+  isFocused: PropTypes.bool.isRequired,
 };
+
+export default withNavigationFocus(Checkins);

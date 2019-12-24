@@ -4,6 +4,8 @@ import { TouchableOpacity } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import { withNavigationFocus } from 'react-navigation';
+
 import { useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
@@ -69,7 +71,7 @@ Item.propTypes = {
   }).isRequired,
 };
 
-export default function HelpOrders({ navigation }) {
+function HelpOrders({ navigation, isFocused }) {
   const id = useSelector(state => state.auth.id);
 
   const [helpOrders, setHelpOrders] = useState([]);
@@ -83,8 +85,10 @@ export default function HelpOrders({ navigation }) {
       setHelpOrders(formattedHelpOrders);
     }
 
-    loadHelpOrders();
-  }, [id]);
+    if (isFocused) {
+      loadHelpOrders();
+    }
+  }, [id, isFocused]);
 
   async function handleNewHelpOrder() {
     navigation.navigate('HelpOrderCreate', {
@@ -114,6 +118,7 @@ HelpOrders.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
+  isFocused: PropTypes.bool.isRequired,
 };
 
 function TabHelpOrdersIcon({ tintColor }) {
@@ -129,3 +134,5 @@ HelpOrders.navigationOptions = {
   tabBarLabel: 'Pedir ajuda',
   tabBarIcon: TabHelpOrdersIcon,
 };
+
+export default withNavigationFocus(HelpOrders);

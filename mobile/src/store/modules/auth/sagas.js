@@ -17,11 +17,17 @@ export function* signIn({ payload }) {
     yield put(signInSuccess(student));
 
     // history.push('/students');
-  } catch (error) {
-    Alert.alert(
-      'Falha na autenticação',
-      'Houve um erro no login, verifique seus dados'
-    );
+  } catch (e) {
+    let message;
+
+    if (e.response) {
+      message = e.response.data.error;
+    } else if (e.request) {
+      message = e.request.toString();
+    } else {
+      message = e.message;
+    }
+    Alert.alert('Falha na autenticação', message);
     yield put(signFailure());
   }
 }

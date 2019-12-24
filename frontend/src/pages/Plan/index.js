@@ -158,7 +158,7 @@ export default function Plan({ history }) {
               value={price}
               type="number"
               onChange={onChangePrice}
-              min="0.01"
+              min="0.00"
               max="9999.99"
             />
             {errorPrice && <span className="error">{errorPrice}</span>}

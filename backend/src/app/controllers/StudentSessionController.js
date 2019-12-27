@@ -3,7 +3,6 @@ import Membership from '../models/Membership';
 class StudentSessionController {
   async index(req, res) {
     const student_id = req.student.id;
-    const active = true;
 
     const result = await Membership.findAll({
       where: { student_id },

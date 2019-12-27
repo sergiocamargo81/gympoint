@@ -36,6 +36,8 @@ No terminal, no diretório do projeto, execute:
 5. **yarn dev** <br>
    Para iniciar o backend
    
+Nota: Caso queira testar as rotas no Insomnia, há um arquivo para importação chamado Insomnia.json na raiz do projeto com todas as rotas utilizadas.
+   
 # Frontend
 1. Faça uma cópia do arquivo **.env.example** e renomei-o para **.env**.  <br>
    Preenchar os campos com suas configurações.
@@ -50,6 +52,8 @@ No terminal, no diretório do projeto, execute:
    
 4. **yarn start** <br>
    Para iniciar o frontend
+   
+Nota: Para logar na aplicação utilize o usuário **admin@gympoint.com** com a senha **123456**.
    
 # Mobile
 <b>IMPORTANTE</b>: Desenvolvido e testado apenas para <b>ANDROID</b>.
